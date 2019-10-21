@@ -1,4 +1,4 @@
 # SpeedWagonFoundation
 # SpeedWagonFoundation
-Luca Staboli      @JamboAmigo
-Jacopo Sitran    @Scintaro
+* Luca Staboli      @JamboAmigo
+* Jacopo Sitran    @Scintaro

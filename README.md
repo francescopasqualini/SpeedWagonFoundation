@@ -1,6 +1,6 @@
 # SpeedWagonFoundation
 # SpeedWagonFoundation
 * Luca Staboli      @JamboAmigo
-* Jacopo Sitran    @Scintaro
+* Jacopo Sitran    @JacopoSitran
 * Francesco Pasqualini @francescopasqualini  MAT. 194179
 * Alessio Valenza @alessiovalenza (187590) 

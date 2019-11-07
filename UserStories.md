@@ -30,10 +30,11 @@
 * Value Points: 3
 * Story Points: 2
 * Come dimostrare: 
-  * Test con utente e password validi 
-  * Test con utente valido e password errata 
-  * Test con nome utente e password sbagliati,
-  * Test recupero credenziali.
+  * Test con utente e password validi.
+  * Test con utente valido e password errata.
+  * Test con nome utente e password sbagliati.
+  * test recupero credenziali.
+
 
 ## User story 2 - BFTB: 1
 * Nome/Descrizione: Registrazione
@@ -43,7 +44,6 @@
   * Test con username già esistente
   * Test con password non valida per la sicurezza
   * Test ricezione email di conferma per registrazione effettuata
-
 
 ## User story 7 - BFTB: 1 
 * Nome/Descrizione: Registrazione miglioramenti
@@ -60,10 +60,3 @@
 * Story Points: 21
 * Come dimostrare: 
   * Test per valutare user experience
-
-
-
-
-
-
-

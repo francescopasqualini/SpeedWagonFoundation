@@ -32,7 +32,8 @@
 * Come dimostrare: 
   * Test con utente e password validi 
   * Test con utente valido e password errata 
-  * Test con nome utente e password sbagliati, test recupero credenziali.
+  * Test con nome utente e password sbagliati,
+  * Test recupero credenziali.
 
 ## User story 2 - BFTB: 1
 * Nome/Descrizione: Registrazione

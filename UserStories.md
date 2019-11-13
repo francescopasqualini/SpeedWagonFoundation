@@ -1,7 +1,7 @@
 # Backlog
 
 ## User story 4 - BFTB: 2.62
-* Nome/Descrizione: Sezione Schede
+* Nome/Descrizione: Sezione Schede per l'allenamento
 * Value Points: 89
 * Story Points: 34
 * Come dimostrare: 
@@ -18,7 +18,7 @@
   * Test modifica tutorial da parte del Personal Trainer
 
 ## User story 6 - BFTB: 1.6
-* Nome/Descrizione: Consigli Personal Trainer 
+* Nome/Descrizione: Consigli del Personal Trainer 
 * Value Points: 21
 * Story Points: 13
 * Come dimostrare: 
@@ -46,7 +46,7 @@
   * Test ricezione email di conferma per registrazione effettuata
 
 ## User story 7 - BFTB: 1 
-* Nome/Descrizione: Registrazione miglioramenti
+* Nome/Descrizione: Registrazione dei miglioramenti
 * Value Points: 55
 * Story Points: 55
 * Come dimostrare: 
@@ -60,3 +60,9 @@
 * Story Points: 21
 * Come dimostrare: 
   * Test per valutare user experience
+
+
+
+## SPRINT:
+
+

@@ -1,4 +1,5 @@
 # Backlog
+## APP PER LA PALESTRA PER REGISTRARE I PROGRESSI E LEGGERE LE SCHEDE
 
 ## User story 1 - BFTB: 3.00
 * Nome/Descrizione: Login
@@ -63,6 +64,6 @@
 
 
 ## SPRINT:
-il primo backlog sprint prevede di fare le user stories N.1/N.4/N.6
+il primo backlog sprint prevede di fare le user stories N.1/N.4
 
 

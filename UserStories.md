@@ -2,7 +2,7 @@
 ## APP PER LA PALESTRA PER REGISTRARE I PROGRESSI E LEGGERE LE SCHEDE
 
 ## User story 1 - BFTB: 3.00
-* Nome/Descrizione: Login
+* Nome/Descrizione: Login - l'utente effettua il login 
 * Value Points: 6
 * Story Points: 2
 * Come dimostrare: 
@@ -12,16 +12,16 @@
   * test recupero credenziali.
 
 ## User story 4 - BFTB: 2.62
-* Nome/Descrizione: Sezione Schede per l'allenamento
+* Nome/Descrizione: Sezione schede per l'allenamento - l'atleta visiona la scheda fornitagli dal personal trainer, mentre il PT crea la scheda
 * Value Points: 89
-* Story Points: 34
+* Story Points: 34l'utente accede a
 * Come dimostrare: 
-  * Test di creazione esercizi da parte del personal trainer
+  * Test di creazione e inserimento esercizi da parte del personal trainer
   * Test modifica esercizi da parte del personal trainer
   * Test di visualizzazione da parte dell'atleta. 
 
 ## User story 6 - BFTB: 2.61
-* Nome/Descrizione: Consigli del Personal Trainer 
+* Nome/Descrizione: Consigli del Personal Trainer -  l'atleta visiona i cosigli alimentari e sullo stile di vita fornitogli dal personal trainer, mentre il PT li crea
 * Value Points: 34
 * Story Points: 13
 * Come dimostrare: 
@@ -29,7 +29,7 @@
   * Test visualizzazione consiglio
 
 ## User story 5 - BFTB: 2.61
-* Nome/Descrizione: Tutorial esercizi
+* Nome/Descrizione: Tutorial esercizi - l'atleta visualizza un breve video tutorial su come fare gli esercizi, il pt può crearli e modificarli
 * Value Points: 34
 * Story Points: 13
 * Come dimostrare: 
@@ -37,7 +37,7 @@
   * Test modifica tutorial da parte del Personal Trainer
 
 ## User story 2 - BFTB: 2.00
-* Nome/Descrizione: Registrazione
+* Nome/Descrizione: Registrazione - l'utente si registra
 * Value Points: 6
 * Story Points: 3
 * Come dimostrare: 
@@ -46,7 +46,7 @@
   * Test ricezione email di conferma per registrazione effettuata
 
 ## User story 7 - BFTB: 1.00
-* Nome/Descrizione: Registrazione dei miglioramenti
+* Nome/Descrizione: Registrazione dei miglioramenti - l'atleta inserisce i propri migloramenti prestazionali e ne viene visualizzato il progresso
 * Value Points: 55
 * Story Points: 55
 * Come dimostrare: 
@@ -55,7 +55,7 @@
   * Test visualizzazione grafico dei miglioramenti
 
 ## User story 3 - BFTB: 0.6
-* Nome/Descrizione: Home page e icona
+* Nome/Descrizione: Home page e icona - come il sito si presenta all'utente
 * Value Points: 13
 * Story Points: 21
 * Come dimostrare: 

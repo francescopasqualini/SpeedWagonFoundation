@@ -14,7 +14,7 @@
 ## User story 4 - BFTB: 2.62
 * Nome/Descrizione: Sezione schede per l'allenamento - l'atleta visiona la scheda fornitagli dal personal trainer, mentre il PT crea la scheda
 * Value Points: 89
-* Story Points: 34l'utente accede a
+* Story Points: 34
 * Come dimostrare: 
   * Test di creazione e inserimento esercizi da parte del personal trainer
   * Test modifica esercizi da parte del personal trainer

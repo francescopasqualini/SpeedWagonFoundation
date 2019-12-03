@@ -3,5 +3,6 @@
 
     "name": "name | null",
     "surname": "surname | null",
-    "email": "email | null"
+    "email": "email | null",
+    "isPT": true
 }

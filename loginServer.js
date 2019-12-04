@@ -4,49 +4,34 @@ app.use(express.json());
 const port = 3000;
 
 
-var loginDatabase={perna:"password", crispo:"12345", fausto:"qwerty"}
-// Handling GET requests
-/*app.get('/', function(req, res) {
-  res.send('Hello World!');
-});
-app.get('/perna', function(req, res) {
-    res.send('Hello World perna!');
-  });*/
+var loginDatabase={processo:{password: "password",name:"bruno",surname:"crispo",email:"example@mail.com",isPt: "true"}, mongodb:{password: "12345",name:"gino",surname:"perna",email:"example@mail.com",isPt: "false"}, monkeyEatedBanana:{password: "qwety",name:"fausto",surname:"giunchiglia",email:"example@mail.com",isPt: "true"}}
 app.post('/login', (req, res) => {
     var payload = req.body
     var nomeDato = payload["username"]; 
     var passwordData = payload["password"]
-    if (typeof(nomeDato) === "undefined" || typeof(passwordData) === "undefined") {
-        res.send("json formattato male")
+    if (nomeDato == undefined || passwordData == undefined) {
+        let risposta = {error:"json bad formed"}
+        res.json(risposta)
     }
     else {
-        var passwordVera = loginDatabase[nomeDato]
-        if (typeof(passwordVera)=="undefined") {
-            res.send("utente non trovato")
+        try {
+            var passwordVera = loginDatabase[nomeDato].password
+        } catch (error) {
+            let risposta = {error:"username or password wrong"}
+            res.json(risposta)
         }
-        else
-        {
-            if (passwordData == passwordVera) {
-                res.send("login eseguito")
-            }
-            else{
-                res.send("utente o password sbagliati")
-            }
+        if (passwordData==passwordVera) {
+            let risposta={name:loginDatabase[nomeDato].name, surname:loginDatabase[nomeDato].surname,email:loginDatabase[nomeDato].email, isPt:loginDatabase[nomeDato].isPt}
+            res.json(risposta)
         }
+        else{
+            let risposta = {error:"username or password wrong"}
+            res.json(risposta)
+        }
+            
     }   
     
-});/*
-app.get('/param', function(req, res) {
-    var jacopo = req.query.nome;
-    if (jacopo == "jacopo"){
-        res.send('Hello World not jacopo! '.concat(req.query.nome));
-    }
-    else{
-        let prova=req.query.a+"";
-        res.send('Hello World jacopo! '.concat(prova));
-    }
-  });
-*/
+});
 app.listen(port, function() {
   console.log('Server running on port ', port);
 });

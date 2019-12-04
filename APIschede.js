@@ -5,35 +5,6 @@ app.use(express.json());
 
 const port = 3000;
 
-// Handling GET requests
-app.get('/', function(req, res) {
-  res.send('Hello World!');
-});
-app.get('/perna', function(req, res) {
-    res.send('Hello World perna!');
-  });
-app.post('/json', (req, res) => {
-    let json=req.body;
-    //var a=json["nome"]
-
-    res.response={
-      nome : 'luca',
-      cognome: 'staben'
-    }
-    res.json(res.response);
-
-});
-app.get('/param', function(req, res) {
-    let jacopo = req.query.a;
-    if (jacopo == "jacopo"){
-        res.send('Hello World not jacopo! '.concat(req.query.a));
-    }
-    else{
-        let prova=req.query.a+"";
-        res.send('Hello World jacopo! '.concat(prova));
-    }
-  });
-
 app.listen(port, function() {
   console.log('Server running on port ', port);
 });

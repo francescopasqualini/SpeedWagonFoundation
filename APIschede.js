@@ -49,7 +49,9 @@ var SchedeDatabase={
 }
 
 //API search GET
-app.get('/schede/visualizzascheda', function(req,res){
+//input: username di un utente
+//output : l scheda di tale utente
+app.get('/schede/search', function(req,res){
     console.log('API_1');
     let json = req.body;
     var username = json["username"];
@@ -68,12 +70,13 @@ app.get('/schede/visualizzascheda', function(req,res){
       }
 
       res.json(res.response);
-
     }
 });
 
 //API Create POST
-app.get('/creascheda', function(req,res){
+//input: i parametri della scheda
+//output: il json della scheda
+app.get('/schede/create', function(req,res){
     console.log('API_2');
     let username = "";
     let id = 0;
@@ -109,7 +112,8 @@ app.get('/creascheda', function(req,res){
 });
 
 //API Read GET
-app.get('/modificascheda', function(req,res){
+///boh
+app.get('/schede/read', function(req,res){
   console.log('API_3');
   //leggo l'id della scheda che voglio modificare
   let id = req.query.id;
@@ -135,11 +139,15 @@ app.get('/modificascheda', function(req,res){
 });
 
 //API Update PUT
-app.get('/schede/',function(req,res){
+//input : nuovi parametri della scheda e id della scheda
+//output : il json della scheda
+app.get('/schede/update',function(req,res){
     console.log('API_4');
 });
 
 //API Delete DELETE
-app.get('/schede/',function(req,res){
-    console.log('API54');
+//input : ide della scheda
+//output : "cancello" la scheda e restutisco boh
+app.get('/schede/delete',function(req,res){
+    console.log('API_5');
 })

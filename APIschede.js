@@ -3,17 +3,18 @@ var app = express();
 
 app.use(express.json());
 
-const port = 3000;
+const port = process.env.PORT ||  3000;
 
 app.listen(port, function() {
   console.log('Server running on port ', port);
 });
 
+//qui metto tutta la parte del "DB"
+
 var loginDatabase={processo:{password: "password",name:"bruno",surname:"crispo",email:"example@mail.com",isPt: "true"},
                    mongodb:{password: "12345",name:"gino",surname:"perna",email:"example@mail.com",isPt: "false"},
                    monkeyEatedBanana:{password: "qwety",name:"fausto",surname:"giunchiglia",email:"example@mail.com",isPt: "true"}
                   }
-
 var SchedeDatabase={
   scheda1:{
     username: "Luca",
@@ -47,8 +48,9 @@ var SchedeDatabase={
   }
 }
 
-
-app.get('/visualizzascheda', function(req,res){
+//API search GET
+app.get('/schede/visualizzascheda', function(req,res){
+    console.log('API_1');
     let json = req.body;
     var username = json["username"];
 
@@ -70,8 +72,9 @@ app.get('/visualizzascheda', function(req,res){
     }
 });
 
+//API Create POST
 app.get('/creascheda', function(req,res){
-
+    console.log('API_2');
     let username = "";
     let id = 0;
     let nome = "";
@@ -105,8 +108,9 @@ app.get('/creascheda', function(req,res){
 
 });
 
+//API Read GET
 app.get('/modificascheda', function(req,res){
-
+  console.log('API_3');
   //leggo l'id della scheda che voglio modificare
   let id = req.query.id;
 
@@ -128,5 +132,14 @@ app.get('/modificascheda', function(req,res){
   }
 
   res.json(res.response);
-
 });
+
+//API Update PUT
+app.get('/schede/',function(req,res){
+    console.log('API_4');
+});
+
+//API Delete DELETE
+app.get('/schede/',function(req,res){
+    console.log('API54');
+})

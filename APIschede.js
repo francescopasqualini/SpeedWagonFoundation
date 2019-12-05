@@ -75,24 +75,16 @@ app.get('/schede/search', function(req,res){
 //output: il json della scheda
 app.get('/schede/create', function(req,res){
     console.log('API_2');
-    let username = "";
-    let id = 0;
-    let nome = "";
-    let tempo_recupero = 0;
-    let peso = 0;
-    let nserie = 0;
-    let nripetizioni = 0;
-    let descrizione = "descrizione";
-    //e altri eventuali parametri della scheda
 
-    username = req.query.username;
-    id = req.query.id;
-    nome = req.query.nome;
-    tempo_recupero = req.query.tempo_recupero;
-    peso = req.query.peso;
-    nserie = req.query.nserie;
-    nripetizioni = req.query.nripetizioni;
-    descrizione = req.query.descrizione;
+    let username = req.query.username;
+    let id = req.query.id;
+    let nome = req.query.nome;
+    let tempo_recupero = req.query.tempo_recupero;
+    let peso = req.query.peso;
+    let nserie = req.query.nserie;
+    let nripetizioni = req.query.nripetizioni;
+    let descrizione = req.query.descrizione;
+    //e altri eventuali parametri della scheda
 
     res.response={
       username : username,
@@ -141,6 +133,41 @@ app.get('/schede/read', function(req,res){
 //output : il json della scheda
 app.get('/schede/update',function(req,res){
     console.log('API_4');
+
+    let username = "";
+    let id = 0;
+    let nome = "";
+    let tempo_recupero = 0;
+    let peso = 0;
+    let nserie = 0;
+    let nripetizioni = 0;
+    let descrizione = "descrizione";
+    //e altri eventuali parametri della scheda
+
+    username = req.query.username;
+    id = req.query.id;
+    nome = req.query.nome;
+    tempo_recupero = req.query.tempo_recupero;
+    peso = req.query.peso;
+    nserie = req.query.nserie;
+    nripetizioni = req.query.nripetizioni;
+    descrizione = req.query.descrizione;
+
+    //scorri tutto il DB per trovare la scheda giusta, poi update i parametri e ritornala
+
+    res.response={
+      username : username,
+      id : id,
+      nome : nome,
+      tempo_recupero : tempo_recupero,
+      peso : peso,
+      nserie : nserie,
+      nripetizioni : nripetizioni,
+      descrizione : descrizione
+    }
+
+    res.json(res.response);
+
 });
 
 //API Delete DELETE
@@ -148,4 +175,10 @@ app.get('/schede/update',function(req,res){
 //output : "cancello" la scheda e restutisco boh
 app.get('/schede/delete',function(req,res){
     console.log('API_5');
+
+    let id = req.query.id;
+
+    //togli tale item dal "DB"
+    //restituisci : yeah l'ho tolto
+
 })

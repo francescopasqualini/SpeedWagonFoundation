@@ -50,26 +50,23 @@ var SchedeDatabase={
 
 //API search GET
 //input: username di un utente
-//output : l scheda di tale utente
+//output : la scheda di tale utente
 app.get('/schede/search', function(req,res){
     console.log('API_1');
+
     let json = req.body;
-    var username = json["username"];
 
-    if(username == 'Luca'){
-      res.response={
+    var id = json["id"];
+    // il resto tutti i parametri delle API
 
-            username: "username",
-            id : 0,
-            nome : "nome",
-            tempo_recupero : 0,
-            peso : 0,
-            nserie : 0,
-            nripetizioni : 0,
-            descrizione : "descrizione"
+    //controllo se l'id c'è nel mio "DB", se si allora ritorno la scheda, il controllo lo faccio per ogni scheda nel DB
+    var i;
+    for (i = 0; i < N_SCHEDE; i++) {
+      if(id == /*scheda_id*/){
+
+        //prendi dal DB la scheda
+        res.json(res.response);
       }
-
-      res.json(res.response);
     }
 });
 
@@ -86,6 +83,7 @@ app.get('/schede/create', function(req,res){
     let nserie = 0;
     let nripetizioni = 0;
     let descrizione = "descrizione";
+    //e altri eventuali parametri della scheda
 
     username = req.query.username;
     id = req.query.id;

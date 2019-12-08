@@ -38,11 +38,11 @@ var loginDatabase={
 
 var SchedeDatabase={
     scheda1:{
-      username: "Bruno",
+      username: "bruno",
       N_esercizi: 2,
       esercizi:{
         esercizio1: {
-            "id" : 0,
+            "id" : 1,
             "nome" : "nome",
             "tempo_recupero": 0,
             "peso": 0,
@@ -51,7 +51,7 @@ var SchedeDatabase={
             "descrizione": "descrizione"
         },
         esercizio2:{
-            "id" : 0,
+            "id" : 2,
             "nome" : "nome",
             "tempo_recupero": 0,
             "peso": 0,
@@ -60,21 +60,68 @@ var SchedeDatabase={
             "descrizione": "descrizione"
         }
     }
+   },
+   scheda2:{
+     username: "gino",
+     N_esercizi: 2,
+     esercizi:{
+       esercizio1: {
+           "id" : 3,
+           "nome" : "nome",
+           "tempo_recupero": 0,
+           "peso": 0,
+           "nserie": 0,
+           "nripetizioni": 0,
+           "descrizione": "descrizione"
+       },
+       esercizio2:{
+           "id" : 4,
+           "nome" : "nome",
+           "tempo_recupero": 0,
+           "peso": 0,
+           "nserie": 0,
+           "nripetizioni": 0,
+           "descrizione": "descrizione"
+       }
    }
+  },
+  scheda3:{
+    username: "fausto",
+    N_esercizi: 2,
+    esercizi:{
+      esercizio1: {
+          "id" : 5,
+          "nome" : "nome",
+          "tempo_recupero": 0,
+          "peso": 0,
+          "nserie": 0,
+          "nripetizioni": 0,
+          "descrizione": "descrizione"
+      },
+      esercizio2:{
+          "id" : 6,
+          "nome" : "nome",
+          "tempo_recupero": 0,
+          "peso": 0,
+          "nserie": 0,
+          "nripetizioni": 0,
+          "descrizione": "descrizione"
+      }
+  }
+ }
 };
 
 
 //API search GET
 //input: username di un utente
 //output : la scheda di tale utente
+//FUNZIONANTE
 app.get('/schede/search', function(req,res){
     console.log('API_1');
 
     //leggo dall'input l'username di cui voglio fare search della scheda
     let json = req.body;
     var usernameToFind = json["username"];
-    console.log(usernameToFind);
-
 
     //controllo se l'username c'è nel mio "DB"
     var found = false;
@@ -83,9 +130,6 @@ app.get('/schede/search', function(req,res){
 
       var value = SchedeDatabase[key];
       var usernameToCheck = value["username"];
-      console.log(usernameToCheck);
-      console.log(usernameToFind);
-
       if(usernameToCheck == usernameToFind){
         found = true;
         res.json(value);
@@ -103,35 +147,25 @@ app.get('/schede/search', function(req,res){
 //API Create POST
 //input: i parametri della scheda
 //output: il json della scheda
-/*
 app.get('/schede/create', function(req,res){
     console.log('API_2');
 
+    //lettura dei parametri
     let username = req.query.username;
-    let id = req.query.id;
-    let nome = req.query.nome;
-    let tempo_recupero = req.query.tempo_recupero;
-    let peso = req.query.peso;
-    let nserie = req.query.nserie;
-    let nripetizioni = req.query.nripetizioni;
-    let descrizione = req.query.descrizione;
-    //e altri eventuali parametri della scheda
+    let N_esercizi = req.query.N_esercizi;
+    let esercizi = req.query.esercizi;
+    console.log(esercizi);
 
     res.response={
       username : username,
-      id : id,
-      nome : nome,
-      tempo_recupero : tempo_recupero,
-      peso : peso,
-      nserie : nserie,
-      nripetizioni : nripetizioni ,
-      descrizione : descrizione
+      N_esercizi : N_esercizi,
+      esercizi : esercizi,
     }
 
     res.json(res.response);
 
 });
-*/
+
 
 
 //API Read GET

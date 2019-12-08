@@ -3,7 +3,8 @@ var app = express();
 
 app.use(express.json());
 
-const port = process.env.PORT ||  3000;
+//const port = process.env.PORT ||  3000;
+const port =  3000;
 
 app.listen(port, function() {
   console.log('Server running on port ', port);
@@ -11,42 +12,57 @@ app.listen(port, function() {
 
 //qui metto tutta la parte del "DB"
 
-var loginDatabase={processo:{password: "password",name:"bruno",surname:"crispo",email:"example@mail.com",isPt: "true"},
-                   mongodb:{password: "12345",name:"gino",surname:"perna",email:"example@mail.com",isPt: "false"},
-                   monkeyEatedBanana:{password: "qwety",name:"fausto",surname:"giunchiglia",email:"example@mail.com",isPt: "true"}
-                  }
-var SchedeDatabase={
-  scheda1:{
-    username: "Luca",
-    id : 1,
-    nome : "panca piana",
-    tempo_recupero : 120,
-    peso : 20,
-    nserie : 4,
-    nripetizioni : 90,
-    descrizione : "usa la panca piana"
+var loginDatabase={
+  processo:{
+    password: "password",
+    name:"bruno",
+    surname:"crispo",
+    email:"example@mail.com",
+    isPt: "true"
   },
-  scheda2:{
-    username: "Federico",
-    id : 2,
-    nome : "addominali",
-    tempo_recupero : 240,
-    peso : 10,
-    nserie : 7,
-    nripetizioni : 10,
-    descrizione : "fai degli addominali"
+  mongodb:{
+    password: "12345",
+    name:"gino",
+    surname:"perna",
+    email:"example@mail.com",
+    isPt: "false"
   },
-  scheda3:{
-    username: "Sara",
-    id : 3,
-    nome : "flessioni",
-    tempo_recupero : 60,
-    peso : 20,
-    nserie : 2,
-    nripetizioni : 20,
-    descrizione : "fai delle flessioni"
+  monkeyEatedBanana:{
+    password: "qwety",
+    name:"fausto",
+    surname:"giunchiglia",
+    email:"example@mail.com",
+    isPt: "true"
   }
-}
+};
+
+var SchedeDatabase={
+    scheda1:{
+      username: "Bruno",
+      N_esercizi: 2,
+      esercizi:{
+        esercizio1: {
+            "id" : 0,
+            "nome" : "nome",
+            "tempo_recupero": 0,
+            "peso": 0,
+            "nserie": 0,
+            "nripetizioni": 0,
+            "descrizione": "descrizione"
+        },
+        esercizio2:{
+            "id" : 0,
+            "nome" : "nome",
+            "tempo_recupero": 0,
+            "peso": 0,
+            "nserie": 0,
+            "nripetizioni": 0,
+            "descrizione": "descrizione"
+        }
+    }
+   }
+};
+
 
 //API search GET
 //input: username di un utente
@@ -54,25 +70,40 @@ var SchedeDatabase={
 app.get('/schede/search', function(req,res){
     console.log('API_1');
 
+    //leggo dall'input l'username di cui voglio fare search della scheda
     let json = req.body;
+    var usernameToFind = json["username"];
+    console.log(usernameToFind);
 
-    var id = json["id"];
-    // il resto tutti i parametri delle API
 
-    //controllo se l'id c'è nel mio "DB", se si allora ritorno la scheda, il controllo lo faccio per ogni scheda nel DB
-    var i;
-    for (i = 0; i < N_SCHEDE; i++) {
-      if(id == /*scheda_id*/){
+    //controllo se l'username c'è nel mio "DB"
+    var found = false;
 
-        //prendi dal DB la scheda
-        res.json(res.response);
+    for(var key in SchedeDatabase){
+
+      var value = SchedeDatabase[key];
+      var usernameToCheck = value["username"];
+      console.log(usernameToCheck);
+      console.log(usernameToFind);
+
+      if(usernameToCheck == usernameToFind){
+        found = true;
+        res.json(value);
       }
     }
+
+    //nel caso non venga trovato...
+    res.response={
+      error : "ERROR, USERNAME NON TROVATO",
+    }
+    res.json(res.response);
+
 });
 
 //API Create POST
 //input: i parametri della scheda
 //output: il json della scheda
+/*
 app.get('/schede/create', function(req,res){
     console.log('API_2');
 
@@ -100,9 +131,12 @@ app.get('/schede/create', function(req,res){
     res.json(res.response);
 
 });
+*/
+
 
 //API Read GET
-///boh
+///boh forse non va fatta
+/*
 app.get('/schede/read', function(req,res){
   console.log('API_3');
   //leggo l'id della scheda che voglio modificare
@@ -127,10 +161,13 @@ app.get('/schede/read', function(req,res){
 
   res.json(res.response);
 });
+*/
+
 
 //API Update PUT
 //input : nuovi parametri della scheda e id della scheda
 //output : il json della scheda
+/*
 app.get('/schede/update',function(req,res){
     console.log('API_4');
 
@@ -169,11 +206,15 @@ app.get('/schede/update',function(req,res){
     res.json(res.response);
 
 });
+*/
+
 
 //API Delete DELETE
 //input : ide della scheda
 //output : "cancello" la scheda e restutisco boh
+/*
 app.get('/schede/delete',function(req,res){
+
     console.log('API_5');
 
     let id = req.query.id;
@@ -182,3 +223,143 @@ app.get('/schede/delete',function(req,res){
     //restituisci : yeah l'ho tolto
 
 })
+*/
+
+
+
+
+//vecchie cose
+/*
+{
+    "username": "username",
+    "esercizi":[
+        [
+            {
+                "id" : 0,
+                "nome" : "nome",
+                "tempo_recupero": 0,
+                "peso": 0,
+                "nserie": 0,
+                "nripetizioni": 0,
+                "descrizione": "descrizione"
+            },
+            {
+                "id" : 0,
+                "nome" : "nome",
+                "tempo_recupero": 0,
+                "peso": 0,
+                "nserie": 0,
+                "nripetizioni": 0,
+                "descrizione": "descrizione"
+            },
+            ...
+        ],
+        [
+            {
+                "id" : 0,
+                "nome" : "nome",
+                "tempo_recupero": 0,
+                "peso": 0,
+                "nserie": 0,
+                "nripetizioni": 0,
+                "descrizione": "descrizione"
+            },
+            {
+                "id" : 0,
+                "nome" : "nome",
+                "tempo_recupero": 0,
+                "peso": 0,
+                "nserie": 0,
+                "nripetizioni": 0,
+                "descrizione": "descrizione"
+            },
+            ...
+        ],
+        ...
+    ]
+}
+*/
+
+                  /*
+var SchedeDatabase={
+  scheda1:{
+    username: "Luca",
+    id : 1,
+    nome : "panca piana",
+    tempo_recupero : 120,
+    peso : 20,
+    nserie : 4,
+    nripetizioni : 90,
+    descrizione : "usa la panca piana"
+  },
+  scheda2:{
+    username: "Federico",
+    id : 2,
+    nome : "addominali",
+    tempo_recupero : 240,
+    peso : 10,
+    nserie : 7,
+    nripetizioni : 10,
+    descrizione : "fai degli addominali"
+  },
+  scheda3:{
+    username: "Sara",
+    id : 3,
+    nome : "flessioni",
+    tempo_recupero : 60,
+    peso : 20,
+    nserie : 2,
+    nripetizioni : 20,
+    descrizione : "fai delle flessioni"
+  }
+}*/
+/*
+var schede = {
+    "username": "username",
+    "esercizi":[
+        [
+            {
+                "id" : 0,
+                "nome" : "nome",
+                "tempo_recupero": 0,
+                "peso": 0,
+                "nserie": 0,
+                "nripetizioni": 0,
+                "descrizione": "descrizione"
+            },
+            {
+                "id" : 0,
+                "nome" : "nome",
+                "tempo_recupero": 0,
+                "peso": 0,
+                "nserie": 0,
+                "nripetizioni": 0,
+                "descrizione": "descrizione"
+            },
+            ...
+        ],
+        [
+            {
+                "id" : 0,
+                "nome" : "nome",
+                "tempo_recupero": 0,
+                "peso": 0,
+                "nserie": 0,
+                "nripetizioni": 0,
+                "descrizione": "descrizione"
+            },
+            {
+                "id" : 0,
+                "nome" : "nome",
+                "tempo_recupero": 0,
+                "peso": 0,
+                "nserie": 0,
+                "nripetizioni": 0,
+                "descrizione": "descrizione"
+            },
+            ...
+        ],
+        ...
+    ]
+
+*/

@@ -141,10 +141,9 @@ app.get('/schede/search', function(req,res){
       error : "ERROR, USERNAME NON TROVATO",
     }
     res.json(res.response);
-
 });
 
-//API Create POST
+//API create POST
 //input: i parametri della scheda
 //output: il json della scheda
 app.get('/schede/create', function(req,res){
@@ -161,7 +160,6 @@ app.get('/schede/create', function(req,res){
       N_esercizi : N_esercizi,
       esercizi : esercizi,
     }
-
     res.json(res.response);
 
 });
@@ -170,77 +168,49 @@ app.get('/schede/create', function(req,res){
 
 //API Read GET
 ///boh forse non va fatta
-/*
 app.get('/schede/read', function(req,res){
   console.log('API_3');
-  //leggo l'id della scheda che voglio modificare
-  let id = req.query.id;
-
-  //prendo dal dizionario la scheda che voglio
-
-  //la modifico
-
-
-  res.response={
-    username : username,
-    id : id,
-    nome : nome,
-    tempo_recupero : tempo_recupero,
-    peso : peso,
-    nserie : nserie,
-    nripetizioni : nripetizioni ,
-    descrizione : descrizione
-    //tutto il resto dei parametri
-  }
-
-  res.json(res.response);
 });
-*/
 
 
 //API Update PUT
 //input : nuovi parametri della scheda e id della scheda
 //output : il json della scheda
-/*
+
 app.get('/schede/update',function(req,res){
     console.log('API_4');
 
-    let username = "";
-    let id = 0;
-    let nome = "";
-    let tempo_recupero = 0;
-    let peso = 0;
-    let nserie = 0;
-    let nripetizioni = 0;
-    let descrizione = "descrizione";
-    //e altri eventuali parametri della scheda
+    //ottengo la scheda dal DB
+    //leggo dall'input l'username di cui voglio fare search della scheda
+    let json = req.body;
+    var usernameToFind = json["username"];
 
-    username = req.query.username;
-    id = req.query.id;
-    nome = req.query.nome;
-    tempo_recupero = req.query.tempo_recupero;
-    peso = req.query.peso;
-    nserie = req.query.nserie;
-    nripetizioni = req.query.nripetizioni;
-    descrizione = req.query.descrizione;
+    //controllo se l'username c'è nel mio "DB"
+    var found = false;
 
-    //scorri tutto il DB per trovare la scheda giusta, poi update i parametri e ritornala
+    for(var key in SchedeDatabase){
 
-    res.response={
-      username : username,
-      id : id,
-      nome : nome,
-      tempo_recupero : tempo_recupero,
-      peso : peso,
-      nserie : nserie,
-      nripetizioni : nripetizioni,
-      descrizione : descrizione
+      var value = SchedeDatabase[key];
+      var usernameToCheck = value["username"];
+      if(usernameToCheck == usernameToFind){
+        found = true;
+        res.json(value);
+      }
     }
 
+    //non so bene come fare in modo che vengano cambiati
+
+
+    //ritorno il json della scheda
+    res.response={
+      username : username,
+      N_esercizi : N_esercizi,
+      esercizi : esercizi,
+    }
     res.json(res.response);
 
 });
-*/
+
 
 
 //API Delete DELETE

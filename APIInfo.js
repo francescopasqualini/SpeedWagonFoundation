@@ -3,7 +3,7 @@ var app = express();
 
 app.use(express.json);
 
-const port = process.env.PORT || 3000;
+const port = 3000;
 
 app.listen(port, function(){
   console.log('Server running on port ', port);
@@ -40,7 +40,7 @@ var infoDb = {
 };
 
 //search GET
-app.get('/info/retrive', function (req, res){
+app.get('/info/retrive/', function (req, res){
   console.log('searching for a info');
   let json = req.body;
   var typeToFind = json["type"];
@@ -51,6 +51,7 @@ app.get('/info/retrive', function (req, res){
     if (typeToCheck == typeToFind){
       found = true;
       res.json(value);
+      res.send('Qualcosa funziona');
     }
   }
   res.response={

@@ -86,10 +86,6 @@ app.get('/storico', function(req, res){
     // }
     res.response={error:"Not pervenuto"};
 });
-app.get('/', function(req, res){ 
-  console.log("GELLO")
-  res.send('Hello World!');
-});
 
 // update data PUT
 app.put('/storico', function(req, res){

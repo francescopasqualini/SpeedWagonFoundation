@@ -1,8 +1,8 @@
 
+
 var express = require('express');
 const bodyParser = require('body-parser');
 var app = express();
-
 app.use(express.json());
 
 //const port = process.env.PORT ||  3000;
@@ -38,9 +38,10 @@ var loginDatabase={
   }
 };
 
+//AGGIUNGI L'ID ALLA SCHEDA , I METADATI , E I 404 / 200 E ROBE VARIE
 var SchedeDatabase={
     1:{
-      username: "bruno",
+     username: "bruno",
       N_esercizi: 2,
       esercizi:{
         esercizio1: {
@@ -117,7 +118,7 @@ var SchedeDatabase={
 //input: l'ID della scheda
 //output : la scheda di tale utente
 app.get('/schede/:id', function(req,res){
-    console.log('API_1');
+    console.log('API_search');
 
     //leggo dall'url l'ID della scheda
     const idToFind = parseInt(req.params.id);
@@ -154,7 +155,7 @@ app.get('/schede/:id', function(req,res){
 //input: i parametri della scheda tramite un json
 //output: il json della scheda
 app.post('/schede', function(req,res){
-    console.log('API_2');
+    console.log('API_create');
     let json = req.body;
 
     //lettura dei parametri
@@ -179,85 +180,66 @@ app.post('/schede', function(req,res){
 });
 
 
-//API Read GET
-///boh forse non va fatta
-app.get('/schede/read', function(req,res){
-  console.log('API_3');
-});
-
-
 //API Update PUT
-//input : nuovi parametri della scheda e id della scheda
+//input : id della scheda e json della scheda
 //output : il json della scheda
-app.get('/schede/update',function(req,res){
-    console.log('API_4');
+app.get('/schede/:id',function(req,res){
+    console.log('API_update');
 
-    //ottengo la scheda dal DB
-    //leggo dall'input l'username di cui voglio fare search della scheda
-    let json = req.body;
-    var usernameToFind = json["username"];
+    //leggo dall'url l'ID della scheda
+    const idToFind = parseInt(req.params.id);
 
     //controllo se l'username c'è nel mio "DB"
     var found = false;
 
     for(var key in SchedeDatabase){
-
-      var value = SchedeDatabase[key];
-      var usernameToCheck = value["username"];
-      if(usernameToCheck == usernameToFind){
+      if(key == idToFind){
         found = true;
-        //res.json(value);
+        res.json(SchedeDatabase[key]);
       }
-    }
-
-    if(found == true){
-      //ritorno il json della scheda
-      res.response={
-        username : username,
-        N_esercizi : N_esercizi,
-        esercizi : esercizi,
-      }
-      res.json(res.response);
-
-    }
-    else{
-      res.response={
-        error : "ERROR, USERNAME NON TROVATO",
-      }
-      res.json(res.response);
 
     }
 
-    //non so bene come fare in modo che vengano cambiat
+    let json = req.body;
 
+    //lettura dei parametri
+    let username = json["username"];
+    let N_esercizi = json["N_esercizi"];
+    let esercizi = json["esercizi"];
+
+    res.response={
+      username : username,
+      N_esercizi : N_esercizi,
+      esercizi : esercizi
+    }
+
+    res.json(res.response);
 });
 
 
 //API Delete DELETE
-//input : ide della scheda
-//output : "cancello" la scheda e restutisco boh
-app.delete('/schede/delete',function(req,res){
-    console.log('API_5');
+//input : id della scheda
+//output : "cancello" la scheda
+app.delete('/schede/:id',function(req,res){
+    console.log('API_delete');
 
-    let json = req.body;
-    var usernameToFind = json["username"];
+    const idToDelete = parseInt(req.params.id);
 
     //controllo se l'username c'è nel mio "DB"
     var found = false;
 
     for(var key in SchedeDatabase){
 
-      var value = SchedeDatabase[key];
-      var usernameToCheck = value["username"];
-      if(usernameToCheck == usernameToFind){
+      if(key == idToFind){
         found = true;
-        //res.json(value);
+      //  res.json(SchedeDatabase[key]);
       }
+
     }
 
     if(found == true){
-      console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
       SchedeDatabase.remove("scheda2");
+      //QUESTA ROBA ANCORA NON FUNZIONA
     }
     else{
       res.response={
@@ -265,11 +247,14 @@ app.delete('/schede/delete',function(req,res){
       }
       res.json(res.response);
     }
-    //togli tale item dal "DB"
-    //restituisci : yeah l'ho tolto
 });
 
 
+//API Read GET
+///boh forse non va fatta
+app.get('/schede/read', function(req,res){
+  console.log('API_read');
+});
 
 
 

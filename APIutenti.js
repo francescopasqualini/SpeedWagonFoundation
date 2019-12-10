@@ -9,6 +9,7 @@ const port =  process.env.PORT ||  3000;
 app.listen(port, function() {
   console.log('Server running on port ', port);
 });
+var badFormed = {error:"request bad formed"}
 
 let merge = (...arguments) => {
 
@@ -58,8 +59,8 @@ var utentiDatabase={
     name:"bruno",
     surname:"crispo",
     email:"example@mail.com",
+    username: "processo",
     isPt: "true",
-    username: "processo"
   },
   2:{
     id: "2",
@@ -87,7 +88,7 @@ app.get('/users', function(req,res){
             utentiDatabaseArray.push(utentiDatabase[element])
         });
         /*var risposta={};
-        for(var key in utentiDatabase){
+        for(var key in utentiDatabase){
             var tmp = risposta
             var risposta  = merge(tmp,utentiDatabase[key])
             console.log(typeof(risposta))
@@ -152,49 +153,28 @@ app.delete('/users/:id', function(req,res){
 app.post('/users',function(req,res){
     console.log('API_4');
     let payload = req.body;
-    let key = dim+1;
-    dim = dim +1
-    key = key + "";
-    let tmp = {id: "null", password: "null", name: "null", surname: "null",  email: "null", isPt: "null"}
-    var tmpArray = ["id","password","name","surname","email","username","isPt"]
-    console.log(Object.keys(payload))
-    tmpArray.forEach(element => {
-        console.log(element)
-        tmp[element]=payload[element]
-    });
-    console.log("adad")
-    utentiDatabase[key]=tmp/*
-    Object.assign(utentiDatabase[key],tmp)*/
-    //utentiDatabase[key]=payload
-    res.status(200).send()
-
-   /* var usernameToFind = json["username"];
-
-    //controllo se l'username c'è nel mio "DB"
-    var found = false;
-
-    for(var key in SchedeDatabase){
-
-      var value = SchedeDatabase[key];
-      var usernameToCheck = value["username"];
-      if(usernameToCheck == usernameToFind){
-        found = true;
-        res.json(value);
-      }
+    if (payload["password"] === undefined || payload["name"] === undefined || 
+       payload["surname"] === undefined || payload["email"] === undefined ||
+       payload["isPt"] === undefined || Object.keys(payload).length != 6 || payload["username"] === undefined) {
+        res.status(400).json(badFormed)
+       }
+    else{
+        let key = dim+1;
+        dim = dim +1
+        key = key + "";
+        utentiDatabase[key]={}
+        utentiDatabase[key]["id"]=key
+        utentiDatabase[key]["password"]="null"
+        utentiDatabase[key]["name"]="null"
+        utentiDatabase[key]["surname"]="null"
+        utentiDatabase[key]["email"]="null"
+        utentiDatabase[key]["username"]="null"
+        utentiDatabase[key]["isPt"]="null"
+        Object.keys(payload).forEach(element => {
+            utentiDatabase[key][element]=payload[element]
+        });
+        res.status(200).send()
     }
-
-    //non so bene come fare in modo che vengano cambiati
-
-
-    //ritorno il json della scheda
-    res.response={
-    console.log('API_4');
-    let json = req.body;
-      username : username,
-      N_esercizi : N_esercizi,
-      esercizi : esercizi,
-    }
-    res.json(res.response);*/
 
 });
 

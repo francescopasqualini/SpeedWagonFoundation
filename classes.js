@@ -23,9 +23,6 @@ class Db {
         }
         return res
     }
-    sendAll(idUser1, message){
-
-    }
     retrieveMessage(idSender, idUser2, idMessage) {
         let res = null
         let idchat = getIdChat(idSender, idUser2)
@@ -33,7 +30,9 @@ class Db {
             var messagesList = this.dbchat[idchat][idSender]
             var index = messagesList.findIndex(m => m.id == idMessage)
             res = index != -1 ? messagesList[index] : res
-            res.received_at = getTimestamp()
+            if (res){
+                res.received_at = getTimestamp()
+            }
         }
         return res
     }

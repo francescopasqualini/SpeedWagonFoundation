@@ -18,12 +18,13 @@ app.listen(port, function () {
     console.log('Listening at http://localhost:' + port)
 })
 
-app.use('/chat/:idFrom/:idTo/:idMessage?', function (req, res, next) {
+app.use('/chat/:idFrom/:idTo?/:idMessage?', function (req, res, next) {
     
     const idFrom = Number.parseInt(req.params.idFrom)
     const idTo = Number.parseInt(req.params.idTo)
     const idMessage = Number.parseInt(req.params.idMessage)
-    let idCheck = Number.isInteger(idFrom) && Number.isInteger(idTo)
+    
+    let idCheck = Number.isInteger(idFrom) && (!idTo || Number.isInteger(idTo))
     let messageCheck = idMessage ? Number.isInteger(idMessage) : true
 
     if (idCheck && messageCheck){
@@ -91,6 +92,27 @@ app.post('/chat/:idFrom/:idTo', function (req, res) {
     }
 })
 
+//sendAll
+app.post('/chat/:idFrom', function (req, res) {
+    const idFrom = res.locals.idFrom
+    let body = req.body
+    if (body && body.content && MessageTypes.includes(body.type)){
+        let success = true
+        db.dbchat.users.forEach(function (user) {
+            if (user != idFrom) {
+                let message = new Message(body.type, idFrom, user, body.content)
+                success = db.sendMessage(idFrom, user, message) && success
+            }
+        })
+        if (success){
+            res.status(201).send()
+        }else {
+            res.status(500).send()
+        }
+    }else {
+        res.status(400).send()
+    }
+})
 
 app.delete('/chat/:idFrom/:idTo/:idMessage', function (req, res) {
     const idFrom = res.locals.idFrom
@@ -111,7 +133,7 @@ app.put('/chat/:idFrom/:idTo/:idMessage', function (req, res) {
     if (body && body.content){
         body.id = idMessage
         if (db.editMessage(idFrom, idTo, body)){
-            res.status(201).send()
+            res.status(204).send()
         }else{
             res.status(404).send()
         }

@@ -1,4 +1,6 @@
+
 var express = require('express');
+const bodyParser = require('body-parser');
 var app = express();
 
 app.use(express.json());
@@ -37,7 +39,7 @@ var loginDatabase={
 };
 
 var SchedeDatabase={
-    scheda1:{
+    1:{
       username: "bruno",
       N_esercizi: 2,
       esercizi:{
@@ -61,7 +63,7 @@ var SchedeDatabase={
         }
     }
    },
-   scheda2:{
+   2:{
      username: "gino",
      N_esercizi: 2,
      esercizi:{
@@ -85,11 +87,11 @@ var SchedeDatabase={
        }
    }
   },
-  scheda3:{
+  3:{
     username: "fausto",
     N_esercizi: 2,
     esercizi:{
-      esercizio1: {
+      esercizio1:{
           "id" : 5,
           "nome" : "nome",
           "tempo_recupero": 0,
@@ -101,8 +103,7 @@ var SchedeDatabase={
       esercizio2:{
           "id" : 6,
           "nome" : "nome",
-          "tempo_recupero": 0,
-          "peso": 0,
+          "tempo_recupero": 0,         "peso": 0,
           "nserie": 0,
           "nripetizioni": 0,
           "descrizione": "descrizione"
@@ -113,27 +114,32 @@ var SchedeDatabase={
 
 
 //API search GET
-//input: username di un utente
+//input: l'ID della scheda
 //output : la scheda di tale utente
-//FUNZIONANTE
-app.get('/schede/search', function(req,res){
+app.get('/schede/:id', function(req,res){
     console.log('API_1');
 
+    //leggo dall'url l'ID della scheda
+    const idToFind = parseInt(req.params.id);
+/*
     //leggo dall'input l'username di cui voglio fare search della scheda
     let json = req.body;
     var usernameToFind = json["username"];
-
+*/
     //controllo se l'username c'è nel mio "DB"
     var found = false;
 
     for(var key in SchedeDatabase){
-
-      var value = SchedeDatabase[key];
-      var usernameToCheck = value["username"];
-      if(usernameToCheck == usernameToFind){
+      //var value = SchedeDatabase[key];
+      //var usernameToCheck = value["username"];
+    //  console.log(key);
+    //  console.log("ciao");
+      if(key == idToFind){
         found = true;
-        res.json(value);
+      //  console.log(SchedeDatabase[key]);
+        res.json(SchedeDatabase[key]);
       }
+
     }
 
     //nel caso non venga trovato...
@@ -143,27 +149,34 @@ app.get('/schede/search', function(req,res){
     res.json(res.response);
 });
 
+
 //API create POST
-//input: i parametri della scheda
+//input: i parametri della scheda tramite un json
 //output: il json della scheda
-app.get('/schede/create', function(req,res){
+app.post('/schede', function(req,res){
     console.log('API_2');
+    let json = req.body;
 
     //lettura dei parametri
+    let username = json["username"];
+    let N_esercizi = json["N_esercizi"];
+    let esercizi = json["esercizi"];
+    /*
     let username = req.query.username;
     let N_esercizi = req.query.N_esercizi;
-    let esercizi = req.query.esercizi;
-    console.log(esercizi);
+    let esercizi = req.query.esercizi;*/
+    //console.log(esercizi);
 
+    //console.log(username);
     res.response={
       username : username,
       N_esercizi : N_esercizi,
-      esercizi : esercizi,
+      esercizi : esercizi
     }
+
     res.json(res.response);
 
 });
-
 
 
 //API Read GET
@@ -176,7 +189,6 @@ app.get('/schede/read', function(req,res){
 //API Update PUT
 //input : nuovi parametri della scheda e id della scheda
 //output : il json della scheda
-
 app.get('/schede/update',function(req,res){
     console.log('API_4');
 
@@ -194,40 +206,69 @@ app.get('/schede/update',function(req,res){
       var usernameToCheck = value["username"];
       if(usernameToCheck == usernameToFind){
         found = true;
-        res.json(value);
+        //res.json(value);
       }
     }
 
-    //non so bene come fare in modo che vengano cambiati
+    if(found == true){
+      //ritorno il json della scheda
+      res.response={
+        username : username,
+        N_esercizi : N_esercizi,
+        esercizi : esercizi,
+      }
+      res.json(res.response);
 
-
-    //ritorno il json della scheda
-    res.response={
-      username : username,
-      N_esercizi : N_esercizi,
-      esercizi : esercizi,
     }
-    res.json(res.response);
+    else{
+      res.response={
+        error : "ERROR, USERNAME NON TROVATO",
+      }
+      res.json(res.response);
+
+    }
+
+    //non so bene come fare in modo che vengano cambiat
 
 });
-
 
 
 //API Delete DELETE
 //input : ide della scheda
 //output : "cancello" la scheda e restutisco boh
-/*
-app.get('/schede/delete',function(req,res){
-
+app.delete('/schede/delete',function(req,res){
     console.log('API_5');
 
-    let id = req.query.id;
+    let json = req.body;
+    var usernameToFind = json["username"];
 
+    //controllo se l'username c'è nel mio "DB"
+    var found = false;
+
+    for(var key in SchedeDatabase){
+
+      var value = SchedeDatabase[key];
+      var usernameToCheck = value["username"];
+      if(usernameToCheck == usernameToFind){
+        found = true;
+        //res.json(value);
+      }
+    }
+
+    if(found == true){
+      console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+      SchedeDatabase.remove("scheda2");
+    }
+    else{
+      res.response={
+        error : "ERROR, USERNAME NON TROVATO",
+      }
+      res.json(res.response);
+    }
     //togli tale item dal "DB"
     //restituisci : yeah l'ho tolto
+});
 
-})
-*/
 
 
 

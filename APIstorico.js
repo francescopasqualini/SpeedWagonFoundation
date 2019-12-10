@@ -1,24 +1,29 @@
 var express = require('express');
 var app = express();
-app.use(express.json);
 
+app.use(express.json());
+
+const port =  process.env.PORT ||  3000;
+
+app.listen(port, function() {
+  console.log('Server running on port ', port);
+});
 
 // Database
-//// change date with timestamp of the day
 var storicoDB = {
   "giovanni": {
-      "08/12/2019": {
+      "1575849599": {
           addominali: 10,
           piegamenti: 20,
           pesi: 30
       },
-      "09/12/2019": {
+      "1575935999": {
         piegamenti: 30,
         pesi: 10
     }
   },
   "alberto": {
-    "08/12/2019": {
+    "1575849599": {
         addominali: 10,
         piegamenti: 20,
         pesi: 30
@@ -26,25 +31,46 @@ var storicoDB = {
   }
 };
 
+// functions
+function size(a){
+  let count = 0;
+  for (key in a){
+    ++count;
+  }
+  return count;
+}
+
 // add POST
 app.post('/storico', function(req, res){
   console.log('POST storico');
+  let code = 503;
   let json = req.body;
   var username = json["username"];
   var data = json["data"];
   var esercizi = json["esercizi"];
   if (username && data && esercizi){
+    if (!storicoDB[username]){
+      storicoDB[username] = {}
+    }
+    if (!storicoDB[username][data]){
+      storicoDB[username][data] = {}
+    }
     storicoDB[username][data] = esercizi;
+
     res.response={
       error: null,
-      done: "Added " + esercizi.length + "exercise"
+      done: "Added " + size(esercizi) + " exercise"
     }
+    code = 200;
   } else {
     res.response={
       error: "Error. Username or data or esercizi are INVALID"
     };
+    code = 404;
   }
-  res.json(res.response);
+
+  res.status(code);
+  res.send(res.response);
 });
 
 // get storico GET
@@ -97,11 +123,4 @@ app.put('/storico', function(req, res){
       };
     }
     res.json(res.response);
-});
-
-const port = process.env.PORT || 3000;
-
-var server = app.listen(port, '127.0.0.1', function(){
-  var host = server.address().address;
-  console.log('Server running on port ', port, ' @ ', host);
 });

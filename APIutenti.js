@@ -71,6 +71,7 @@ var utentiDatabase={
     isPt: "false"
   }
 };
+var dim = 2;
 
 //API search GET
 //input: username di un utente
@@ -80,8 +81,11 @@ app.get('/users', function(req,res){
     console.log('API_1');
     try {
         let utentiDatabaseArray = []
-        utentiDatabaseArray.push(utentiDatabase["1"])
-        utentiDatabaseArray.push(utentiDatabase["2"])
+        /*utentiDatabaseArray.push(utentiDatabase["1"])
+        utentiDatabaseArray.push(utentiDatabase["2"])*/
+        Object.keys(utentiDatabase).forEach(element => {
+            utentiDatabaseArray.push(utentiDatabase[element])
+        });
         /*var risposta={};
         for(var key in utentiDatabase){
             var tmp = risposta
@@ -91,9 +95,9 @@ app.get('/users', function(req,res){
             
         }*/
         console.log(utentiDatabaseArray[1])
-        var risposta={"users":utentiDatabaseArray}
+        //var risposta={"users":utentiDatabaseArray}
         res.status(200)
-        res.json(risposta);
+        res.json(utentiDatabaseArray);
     } catch (error) {
         res.status(500)
         res.send()
@@ -110,22 +114,34 @@ app.get('/users/:id', function(req,res){
     const id = parseInt(req.params.id);
     let response=utentiDatabase[id]
     //lettura dei parametri
-    if (typeof response === undefined){
+    if (response === undefined){
+        console.log("404")
         res.status(404)
         res.send()
     }
     else {
-        res.status(404);
-        res.json(response)};
+        console.log("200")
+        console.log(response)
+        res.status(200).json(response);}
 
 });
 
 
 
-//API Read GET
-///boh forse non va fatta
-app.get('/schede/read', function(req,res){
+//cacella un utente
+app.delete('/users/:id', function(req,res){
   console.log('API_3');
+  const id = parseInt(req.params.id);
+  let response=utentiDatabase[id]
+  if (response === undefined){
+    console.log(response)
+    res.status(404)
+    res.send()
+  }else {
+        delete utentiDatabase[id]
+        res.status(200);
+        res.send()
+    }
 });
 
 
@@ -133,13 +149,26 @@ app.get('/schede/read', function(req,res){
 //input : nuovi parametri della scheda e id della scheda
 //output : il json della scheda
 
-app.get('/schede/update',function(req,res){
+app.post('/users',function(req,res){
     console.log('API_4');
+    let payload = req.body;
+    let key = dim+1;
+    dim = dim +1
+    key = key + "";
+    let tmp = {id: "null", password: "null", name: "null", surname: "null",  email: "null", isPt: "null"}
+    var tmpArray = ["id","password","name","surname","email","username","isPt"]
+    console.log(Object.keys(payload))
+    tmpArray.forEach(element => {
+        console.log(element)
+        tmp[element]=payload[element]
+    });
+    console.log("adad")
+    utentiDatabase[key]=tmp/*
+    Object.assign(utentiDatabase[key],tmp)*/
+    //utentiDatabase[key]=payload
+    res.status(200).send()
 
-    //ottengo la scheda dal DB
-    //leggo dall'input l'username di cui voglio fare search della scheda
-    let json = req.body;
-    var usernameToFind = json["username"];
+   /* var usernameToFind = json["username"];
 
     //controllo se l'username c'è nel mio "DB"
     var found = false;
@@ -159,14 +188,30 @@ app.get('/schede/update',function(req,res){
 
     //ritorno il json della scheda
     res.response={
+    console.log('API_4');
+    let json = req.body;
       username : username,
       N_esercizi : N_esercizi,
       esercizi : esercizi,
     }
-    res.json(res.response);
+    res.json(res.response);*/
 
 });
 
+app.put('/users/:id', function(req,res){
+    const id = parseInt(req.params.id);
+    let payload = req.body
+    let utente = utentiDatabase[id];
+    
+    if (utente === undefined) {
+        res.status(404).send()
+    } else {
+        Object.keys(payload).forEach(element => {
+            utentiDatabase[id][element]=payload[element]
+        });
+        res.status(200).send(utentiDatabase[id])
+    }
+  });
 
 
 //API Delete DELETE

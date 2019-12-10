@@ -1,5 +1,4 @@
 
-
 var express = require('express');
 const bodyParser = require('body-parser');
 var app = express();
@@ -104,7 +103,8 @@ var SchedeDatabase={
       esercizio2:{
           "id" : 6,
           "nome" : "nome",
-          "tempo_recupero": 0,         "peso": 0,
+          "tempo_recupero": 0,
+          "peso": 0,
           "nserie": 0,
           "nripetizioni": 0,
           "descrizione": "descrizione"
@@ -122,31 +122,23 @@ app.get('/schede/:id', function(req,res){
 
     //leggo dall'url l'ID della scheda
     const idToFind = parseInt(req.params.id);
-/*
-    //leggo dall'input l'username di cui voglio fare search della scheda
-    let json = req.body;
-    var usernameToFind = json["username"];
-*/
+
     //controllo se l'username c'è nel mio "DB"
     var found = false;
 
     for(var key in SchedeDatabase){
-      //var value = SchedeDatabase[key];
-      //var usernameToCheck = value["username"];
-    //  console.log(key);
-    //  console.log("ciao");
       if(key == idToFind){
         found = true;
-      //  console.log(SchedeDatabase[key]);
+        res.status(200);
         res.json(SchedeDatabase[key]);
       }
-
     }
 
     //nel caso non venga trovato...
     res.response={
       error : "ERROR, USERNAME NON TROVATO",
     }
+    res.status(404);
     res.json(res.response);
 });
 
@@ -162,19 +154,13 @@ app.post('/schede', function(req,res){
     let username = json["username"];
     let N_esercizi = json["N_esercizi"];
     let esercizi = json["esercizi"];
-    /*
-    let username = req.query.username;
-    let N_esercizi = req.query.N_esercizi;
-    let esercizi = req.query.esercizi;*/
-    //console.log(esercizi);
 
-    //console.log(username);
     res.response={
       username : username,
       N_esercizi : N_esercizi,
       esercizi : esercizi
     }
-
+    res.status(200);
     res.json(res.response);
 
 });
@@ -195,25 +181,33 @@ app.get('/schede/:id',function(req,res){
     for(var key in SchedeDatabase){
       if(key == idToFind){
         found = true;
-        res.json(SchedeDatabase[key]);
+        //res.json(SchedeDatabase[key]);
       }
-
     }
 
     let json = req.body;
+    if(found == true){
+      //lettura dei parametri
+      let username = json["username"];
+      let N_esercizi = json["N_esercizi"];
+      let esercizi = json["esercizi"];
 
-    //lettura dei parametri
-    let username = json["username"];
-    let N_esercizi = json["N_esercizi"];
-    let esercizi = json["esercizi"];
-
-    res.response={
-      username : username,
-      N_esercizi : N_esercizi,
-      esercizi : esercizi
+      res.response={
+        username : username,
+        N_esercizi : N_esercizi,
+        esercizi : esercizi
+      }
+      res.status(202);
+      res.json(res.response);
+    }
+    else{
+      res.response={
+        error : "ERROR, USERNAME NON TROVATO",
+      }
+      res.status(404);
+      res.json(res.response);
     }
 
-    res.json(res.response);
 });
 
 
@@ -232,19 +226,20 @@ app.delete('/schede/:id',function(req,res){
 
       if(key == idToFind){
         found = true;
-      //  res.json(SchedeDatabase[key]);
+        //res.json(SchedeDatabase[key]);
       }
-
     }
 
     if(found == true){
       SchedeDatabase.remove("scheda2");
+      res.status(200);
       //QUESTA ROBA ANCORA NON FUNZIONA
     }
     else{
       res.response={
         error : "ERROR, USERNAME NON TROVATO",
       }
+      res.status(404);
       res.json(res.response);
     }
 });

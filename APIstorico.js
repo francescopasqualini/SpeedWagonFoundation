@@ -1,7 +1,3 @@
-/* TODO:
- *  change status code 404 to 'Malformed input' code
- **/
-
 var express = require('express');
 var app = express();
 
@@ -13,6 +9,8 @@ app.listen(port, function() {
   console.log('Server running on port ', port);
 });
 
+
+//-----------------------------------------------------------------------//
 // Database
 var storicoDB = {
   "giovanni": {
@@ -44,6 +42,8 @@ function size(a){
   return count;
 }
 
+
+//-----------------------------------------------------------------------//
 // add POST
 app.post('/storico', function(req, res){
   console.log('POST storico');
@@ -70,7 +70,7 @@ app.post('/storico', function(req, res){
     res.response={
       error: "Error. Username or data or esercizi are INVALID"
     };
-    code = 404;
+    code = 422;
   }
 
   res.status(code);
@@ -78,17 +78,34 @@ app.post('/storico', function(req, res){
 });
 
 // get storico GET
-app.get('/storico', function(req, res){
+app.get('/storico/:username/:data_inizio/:data_fine', function(req, res){
     console.log('GET storico');
-    let json = req.body;
-    let username = json["username"];
-    let data_inizio = json["data_inizio"];
-    let data_fine = json["data_fine"];
-    console.log('DONE');
-    // if (username && data_inizio && data_fine){
-        
-    // }
-    res.response={error:"Not pervenuto"};
+    let username = req.params.username;
+    let data_inizio = req.params.data_inizio;
+    let data_fine = req.params.data_fine;
+    let storico = [];
+    if (username && data_inizio && data_fine && data_fine > data_inizio){
+      for (key in storicoDB[username]){
+        if (key > data_inizio && key < data_fine){
+          storico.push(storicoDB[username]);
+        }
+      }
+      if (storico.length == 0){
+        code = 404;
+        res.response={error:"Storico not found"};
+      } else {
+        code = 200;
+        res.response={
+          error: null,
+          storico : storico
+        };
+      }
+    } else {
+      code = 422;
+      res.response={error:"Error. Username or dates are INVALID"};
+    }
+    res.status(code);
+    res.send(res.response);
 });
 
 // update data PUT
@@ -125,7 +142,7 @@ app.put('/storico', function(req, res){
     res.response={
       error : 'Error. Username or data or esercizi are INVALID'
     };
-    code = 404;
+    code = 422;
   }
   res.status(code)
   res.json(res.response);
@@ -157,7 +174,7 @@ app.delete('/storico', function(req, res){
     res.response={
       error : 'Error. Username or data to del are INVALID'
     };
-    code = 404;
+    code = 422;
   }
   res.status(code);
   res.json(res.response);

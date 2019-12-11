@@ -32,13 +32,13 @@ var infoDb = [
 ];
 
 //search GET
-router.get('/info', function (req, res){
+router.get('/', function (req, res){
   res.status(200);
   res.json(infoDb);
 });
 
 //search by type GET
-router.get('/info/:type', function (req, res){
+router.get('/:type', function (req, res){
   const typeToRetrive = req.params.type;
   var found = false;
   var response = [];
@@ -58,7 +58,7 @@ router.get('/info/:type', function (req, res){
 });
 
 //search a specific field of a type GET
-router.get('/info/:type/:key', function (req, res){
+router.get('/:type/:key', function (req, res){
   const typeToRetrive = req.params.type;
   const keyToRetrive = req.params.key;
   var found = false;
@@ -83,7 +83,7 @@ router.get('/info/:type/:key', function (req, res){
 });
 
 //add new info POST
-router.post('/info', function (req, res){
+router.post('/', function (req, res){
   let newInfo = req.body;
   if (req.body["type"]==undefined){
     res.status(400);
@@ -109,7 +109,7 @@ router.post('/info', function (req, res){
 });
 
 //modify existing info PUT
-router.put('/info/:type', function (req, res){
+router.put('/:type', function (req, res){
   const typeToModify = req.params.type;
   var found = false;
   for (var i=0; i < infoDb.length; i++){
@@ -137,7 +137,7 @@ router.put('/info/:type', function (req, res){
 });
 
 //delete completely existing info DELETE
-router.delete('/info/:type', function(req,res){
+router.delete('/:type', function(req,res){
   const typeToDelete = req.params.type;
   var found = false;
   for (var i=0; i < infoDb.length; i++){
@@ -156,7 +156,7 @@ router.delete('/info/:type', function(req,res){
 });
 
 //delete partially an existing info DELETE
-router.delete('/info/:type/:key', function(req,res){
+router.delete('/:type/:key', function(req,res){
   const typeToModify = req.params.type;
   const keyToDelete = req.params.key;
   var found = false;

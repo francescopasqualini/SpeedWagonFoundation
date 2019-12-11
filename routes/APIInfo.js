@@ -156,7 +156,7 @@ router.delete('/info/:type', function(req,res){
 });
 
 //delete partially an existing info DELETE
-app.delete('/info/:type/:key', function(req,res){
+router.delete('/info/:type/:key', function(req,res){
   const typeToModify = req.params.type;
   const keyToDelete = req.params.key;
   var found = false;

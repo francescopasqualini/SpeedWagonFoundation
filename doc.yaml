@@ -1,0 +1,244 @@
+swagger: '2.0'
+info:
+  version: '1.0'
+  title: "progettois2 "
+  description: Our API allow users to fetch many informations about their gym and their progresses
+# You should put here the URL to your Heroku instance    
+host: se2-movies.herokuapp.com
+basePath: /
+schemes:
+- http
+consumes:
+- application/json
+produces:
+- application/json
+
+paths:
+  /chat/{idFrom}/{idTo}/{idMessage}:
+    get:
+      summary: Show a message 
+      parameters:
+        - name: idFrom
+          in: path
+          required: true
+          description: The id of the sender
+          type: integer
+          format: int64
+          minimum: 1
+        - name: idTo
+          in: path
+          required: true
+          description: The id of the receiver
+          type: integer
+          format: int64
+          minimum: 1
+        - name: idMessage
+          in: path
+          required: true
+          description: The id of the message
+          type: integer
+          format: int64
+          minimum: 1
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Successful Response
+          schema:
+            type: object
+            example:
+              - type: text,
+                from: 1,
+                to: 2,
+                content: Contenuto del messaggio,
+                sent_at: 2019-11-3 19:48:24:696,
+                received_at: 2019-11-3 19:48:41:445,
+                edited_at: null,
+                id: 1
+        404:
+          description: Not found
+    delete:
+      summary: Delete a message
+      parameters:
+        - name: idFrom
+          in: path
+          required: true
+          description: The id of the sender
+          type: integer
+          format: int64
+          minimum: 1
+        - name: idTo
+          in: path
+          required: true
+          description: The id of the receiver
+          type: integer
+          format: int64
+          minimum: 1
+        - name: idMessage
+          in: path
+          required: true
+          description: The id of the message
+          type: integer
+          format: int64
+          minimum: 1
+      responses:
+        204:
+          description: message was deleted successfully
+        404:
+          description: Not found
+    put:
+      summary: Edit a message
+      parameters:
+        - name: idFrom
+          in: path
+          required: true
+          description: The id of the sender
+          type: integer
+          format: int64
+          minimum: 1
+        - name: idTo
+          in: path
+          required: true
+          description: The id of the receiver
+          type: integer
+          format: int64
+          minimum: 1
+        - name: idMessage
+          in: path
+          required: true
+          description: The id of the message
+          type: integer
+          format: int64
+          minimum: 1
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/userRequest'
+      consumes:
+        - application/json
+      responses:
+        204:
+          description: Successful Response
+        400:
+          description: The json in the request does not contain all the required fields
+        404:
+          description: Message not found
+  /chat/{idFrom}/{idTo}:
+    get:
+      summary: get a chat between to users
+      produces:
+        - application/json
+      parameters:
+        - name: idFrom
+          in: path
+          required: true
+          description: The id of the sender
+          type: integer
+          format: int64
+          minimum: 1
+        - name: idTo
+          in: path
+          required: true
+          description: The id of the receiver
+          type: integer
+          format: int64
+          minimum: 1
+      responses:
+        200:
+          description: Successful Response
+          schema:
+            type: object
+            example:
+              - "1": [{
+                "type": "text",
+                "from": 1,
+                "to": 2,
+                "content": "hghghg",
+                "sent_at": "2019-11-3 22:34:21:102",
+                "received_at": null,
+                "edited_at": null,
+                "id": 1
+                }]
+                "2": []
+        404:
+          description: Message not found
+    post:
+      summary: send a message to a user
+      consumes:
+        - application/json
+      parameters:
+        - name: idFrom
+          in: path
+          required: true
+          description: The id of the sender
+          type: integer
+          format: int64
+          minimum: 1
+        - name: idTo
+          in: path
+          required: true
+          description: The id of the receiver
+          type: integer
+          format: int64
+          minimum: 1
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/userRequest'
+      responses:
+        201:
+          description: Message sent
+        400:
+          description: The json in the request does not contain all the required fields
+        500:
+          description: a server error occurred
+  /chat/{idFrom}:
+    post:
+      summary: send a message to all users
+      consumes:
+        - application/json
+      parameters:
+        - name: idFrom
+          in: path
+          required: true
+          description: The id of the sender
+          type: integer
+          format: int64
+          minimum: 1
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/userRequest'
+      responses:
+        201:
+          description: Message sent
+        400:
+          description: The json in the request does not contain all the required fields
+        500:
+          description: a server error occurred
+tags:
+  - name: prova
+    description: X
+definitions:
+  userRequest:
+    title: message
+    type: object
+    properties:
+      content:
+        type: string
+        description: the content of the message
+      type:
+        type: string
+        description: the type of the message, choosen between 'text', 'image', 'voicemail' and 'video'
+
+
+
+
+
+    
+
+
+

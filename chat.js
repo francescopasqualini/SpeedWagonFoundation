@@ -38,7 +38,7 @@ app.use('/chat/:idFrom/:idTo?/:idMessage?', function (req, res, next) {
 });
 
 //logger
-app.use('/chat/:idFrom/:idTo/:idMessage?', function (req, res, next) {
+app.use('/chat/:idFrom/:idTo?/:idMessage?', function (req, res, next) {
     console.log(`${req.method} : ${req.originalUrl}`)
     next()
 })
@@ -51,6 +51,7 @@ app.get('/chat', function (req, res) {
    res.json(db) 
 })
 
+//ottiene un messaggio
 app.get('/chat/:idFrom/:idTo/:idMessage', function(req, res){
     const idFrom = res.locals.idFrom
     const idTo = res.locals.idTo
@@ -64,6 +65,7 @@ app.get('/chat/:idFrom/:idTo/:idMessage', function(req, res){
     
 })
 
+//ottiene una chat
 app.get('/chat/:idFrom/:idTo', function (req, res) {
     const idFrom = res.locals.idFrom
     const idTo = res.locals.idTo
@@ -76,6 +78,7 @@ app.get('/chat/:idFrom/:idTo', function (req, res) {
     
 })
 
+//send a message
 app.post('/chat/:idFrom/:idTo', function (req, res) {
     const idFrom = res.locals.idFrom
     const idTo = res.locals.idTo
@@ -92,7 +95,7 @@ app.post('/chat/:idFrom/:idTo', function (req, res) {
     }
 })
 
-//sendAll
+//send a message to All
 app.post('/chat/:idFrom', function (req, res) {
     const idFrom = res.locals.idFrom
     let body = req.body
@@ -114,17 +117,19 @@ app.post('/chat/:idFrom', function (req, res) {
     }
 })
 
+//delete a message
 app.delete('/chat/:idFrom/:idTo/:idMessage', function (req, res) {
     const idFrom = res.locals.idFrom
     const idTo = res.locals.idTo
     const idMessage = res.locals.idMessage
     if (db.deleteMessage(idFrom, idTo, idMessage)) {
-        res.status(200).send()
+        res.status(204).send()
     }else{
         res.status(404).send()
     }
 })
 
+//edit a message
 app.put('/chat/:idFrom/:idTo/:idMessage', function (req, res) {
     const idFrom = res.locals.idFrom
     const idTo = res.locals.idTo

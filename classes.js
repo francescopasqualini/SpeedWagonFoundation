@@ -82,6 +82,8 @@ class Message{
         this.to = to
         this.content = content
         this.sent_at = sent_at
+        this.received_at = null 
+        this.edited_at = null
     }
 }
 

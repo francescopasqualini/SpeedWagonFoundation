@@ -175,7 +175,7 @@ router.put('/:id',function(req,res){
     }
     else{
       res.response={
-        error : "ERROR, SCHEDA NON TROVATA"",
+        error : "ERROR, SCHEDA NON TROVATA",
       }
       res.status(404);
       res.json(res.response);

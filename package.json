@@ -13,10 +13,7 @@
   "author": "Francesco Pavanello",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^6.13.2",
-    "dotenv": "^6.13.2",
-    "express": "^6.13.2",
-    "node-fetch": "^6.13.2"
+    "express": "^6.13.2"
   },
   "bugs": {
     "url": "https://github.com/francescopasqualini/SpeedWagonFoundation/issues"

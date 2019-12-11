@@ -70,6 +70,10 @@ paths:
           description: The json in the request doesn't  contain all the required fields or some unrequired fields are present
           schema:
             $ref: '#/definitions/error400'
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/error500'
     
   /users/{userId}:
     get:
@@ -91,6 +95,10 @@ paths:
           description: The required id was not found
           schema:
             $ref: '#/definitions/error404'
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/error500'
     delete:
       summary: Delete a user by ID.
       parameters:
@@ -108,6 +116,10 @@ paths:
           description: The required id was not found
           schema:
             $ref: '#/definitions/error404'
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/error500'
     put:
       summary: Modify a user by ID.
       description: >-
@@ -144,12 +156,11 @@ paths:
           description: The required id was not found
           schema:
             $ref: '#/definitions/error404'
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/error500'
             
-    
-    
-tags:
-  - name: user
-    description: Everything about your Pets
 definitions:
   # This is just a simple model for that defines the Primary Key
   # We could reuse this on the rest of our models.

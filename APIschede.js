@@ -4,40 +4,13 @@ const bodyParser = require('body-parser');
 var app = express();
 app.use(express.json());
 
-//const port = process.env.PORT ||  3000;
-const port =  3000;
+const port = process.env.PORT ||  3000;
+
 
 app.listen(port, function() {
   console.log('Server running on port ', port);
 });
 
-//qui metto tutta la parte del "DB"
-
-var loginDatabase={
-  processo:{
-    password: "password",
-    name:"bruno",
-    surname:"crispo",
-    email:"example@mail.com",
-    isPt: "true"
-  },
-  mongodb:{
-    password: "12345",
-    name:"gino",
-    surname:"perna",
-    email:"example@mail.com",
-    isPt: "false"
-  },
-  monkeyEatedBanana:{
-    password: "qwety",
-    name:"fausto",
-    surname:"giunchiglia",
-    email:"example@mail.com",
-    isPt: "true"
-  }
-};
-
-//AGGIUNGI L'ID ALLA SCHEDA , I METADATI , E I 404 / 200 E ROBE VARIE
 var SchedeDatabase={
     1:{
      username: "bruno",
@@ -45,21 +18,21 @@ var SchedeDatabase={
       esercizi:{
         esercizio1: {
             "id" : 1,
-            "nome" : "nome",
-            "tempo_recupero": 0,
-            "peso": 0,
-            "nserie": 0,
-            "nripetizioni": 0,
-            "descrizione": "descrizione"
+            "nome" : "panca",
+            "tempo_recupero": 120,
+            "peso": 20,
+            "nserie": 5,
+            "nripetizioni": 5,
+            "descrizione": "usa la panca"
         },
         esercizio2:{
             "id" : 2,
-            "nome" : "nome",
-            "tempo_recupero": 0,
-            "peso": 0,
-            "nserie": 0,
-            "nripetizioni": 0,
-            "descrizione": "descrizione"
+            "nome" : "flessioni",
+            "tempo_recupero": 60,
+            "peso": 1,
+            "nserie": 7,
+            "nripetizioni": 2,
+            "descrizione": "fai le flessioni"
         }
     }
    },
@@ -69,21 +42,21 @@ var SchedeDatabase={
      esercizi:{
        esercizio1: {
            "id" : 3,
-           "nome" : "nome",
-           "tempo_recupero": 0,
-           "peso": 0,
-           "nserie": 0,
-           "nripetizioni": 0,
-           "descrizione": "descrizione"
+           "nome" : "trazioni",
+           "tempo_recupero": 240,
+           "peso": 5,
+           "nserie": 50,
+           "nripetizioni": 10,
+           "descrizione": "fai le trazioni"
        },
        esercizio2:{
            "id" : 4,
-           "nome" : "nome",
-           "tempo_recupero": 0,
-           "peso": 0,
-           "nserie": 0,
-           "nripetizioni": 0,
-           "descrizione": "descrizione"
+           "nome" : "military press",
+           "tempo_recupero": 10,
+           "peso": 50,
+           "nserie": 3,
+           "nripetizioni": 9,
+           "descrizione": "fai la military press"
        }
    }
   },
@@ -93,25 +66,26 @@ var SchedeDatabase={
     esercizi:{
       esercizio1:{
           "id" : 5,
-          "nome" : "nome",
-          "tempo_recupero": 0,
-          "peso": 0,
-          "nserie": 0,
-          "nripetizioni": 0,
-          "descrizione": "descrizione"
+          "nome" : "stacco",
+          "tempo_recupero": 120,
+          "peso": 80,
+          "nserie": 70,
+          "nripetizioni": 5,
+          "descrizione": "fai lo stacco"
       },
       esercizio2:{
           "id" : 6,
-          "nome" : "nome",
-          "tempo_recupero": 0,
-          "peso": 0,
-          "nserie": 0,
-          "nripetizioni": 0,
-          "descrizione": "descrizione"
+          "nome" : "squat",
+          "tempo_recupero": 120,
+          "peso": 40,
+          "nserie":30,
+          "nripetizioni": 30,
+          "descrizione": "fai gli squat"
       }
   }
  }
 };
+var next_id = 4;
 
 
 //API search GET
@@ -120,10 +94,8 @@ var SchedeDatabase={
 app.get('/schede/:id', function(req,res){
     console.log('API_search');
 
-    //leggo dall'url l'ID della scheda
     const idToFind = parseInt(req.params.id);
 
-    //controllo se l'username c'è nel mio "DB"
     var found = false;
 
     for(var key in SchedeDatabase){
@@ -134,9 +106,8 @@ app.get('/schede/:id', function(req,res){
       }
     }
 
-    //nel caso non venga trovato...
     res.response={
-      error : "ERROR, USERNAME NON TROVATO",
+      error : "ERROR, SCHEDA NON TROVATA",
     }
     res.status(404);
     res.json(res.response);
@@ -150,15 +121,21 @@ app.post('/schede', function(req,res){
     console.log('API_create');
     let json = req.body;
 
-    //lettura dei parametri
     let username = json["username"];
     let N_esercizi = json["N_esercizi"];
     let esercizi = json["esercizi"];
 
-    res.response={
+    var item={
       username : username,
       N_esercizi : N_esercizi,
       esercizi : esercizi
+    }
+
+    SchedeDatabase[next_id]=item;
+    next_id = next_id + 1;
+
+    res.response={
+      item
     }
     res.status(200);
     res.json(res.response);
@@ -169,40 +146,44 @@ app.post('/schede', function(req,res){
 //API Update PUT
 //input : id della scheda e json della scheda
 //output : il json della scheda
-app.get('/schede/:id',function(req,res){
+app.put('/schede/:id',function(req,res){
     console.log('API_update');
 
-    //leggo dall'url l'ID della scheda
     const idToFind = parseInt(req.params.id);
 
-    //controllo se l'username c'è nel mio "DB"
     var found = false;
-
+    var keyToChange;
     for(var key in SchedeDatabase){
       if(key == idToFind){
         found = true;
-        //res.json(SchedeDatabase[key]);
+        keyToChange = key;
       }
     }
 
     let json = req.body;
     if(found == true){
-      //lettura dei parametri
+
       let username = json["username"];
       let N_esercizi = json["N_esercizi"];
       let esercizi = json["esercizi"];
 
-      res.response={
+      var item = {
         username : username,
         N_esercizi : N_esercizi,
         esercizi : esercizi
       }
-      res.status(202);
+
+      SchedeDatabase[keyToChange] = item;
+
+      res.response={
+        item
+      }
+      res.status(200);
       res.json(res.response);
     }
     else{
       res.response={
-        error : "ERROR, USERNAME NON TROVATO",
+        error : "ERROR, SCHEDA NON TROVATA"",
       }
       res.status(404);
       res.json(res.response);
@@ -219,172 +200,30 @@ app.delete('/schede/:id',function(req,res){
 
     const idToDelete = parseInt(req.params.id);
 
-    //controllo se l'username c'è nel mio "DB"
     var found = false;
-
+    var keyToRemove;
     for(var key in SchedeDatabase){
 
-      if(key == idToFind){
+      if(key == idToDelete){
         found = true;
-        //res.json(SchedeDatabase[key]);
+        keyToRemove = key;
       }
     }
 
     if(found == true){
-      SchedeDatabase.remove("scheda2");
+
+      delete SchedeDatabase[keyToRemove];
+      res.response={
+        responso : "CANCELLATO ITEM",
+      }
       res.status(200);
-      //QUESTA ROBA ANCORA NON FUNZIONA
+      res.json(res.response);
     }
     else{
       res.response={
-        error : "ERROR, USERNAME NON TROVATO",
+        error : "ERROR, SCHEDA NON TROVATA"",
       }
       res.status(404);
       res.json(res.response);
     }
 });
-
-
-//API Read GET
-///boh forse non va fatta
-app.get('/schede/read', function(req,res){
-  console.log('API_read');
-});
-
-
-
-//vecchie cose
-/*
-{
-    "username": "username",
-    "esercizi":[
-        [
-            {
-                "id" : 0,
-                "nome" : "nome",
-                "tempo_recupero": 0,
-                "peso": 0,
-                "nserie": 0,
-                "nripetizioni": 0,
-                "descrizione": "descrizione"
-            },
-            {
-                "id" : 0,
-                "nome" : "nome",
-                "tempo_recupero": 0,
-                "peso": 0,
-                "nserie": 0,
-                "nripetizioni": 0,
-                "descrizione": "descrizione"
-            },
-            ...
-        ],
-        [
-            {
-                "id" : 0,
-                "nome" : "nome",
-                "tempo_recupero": 0,
-                "peso": 0,
-                "nserie": 0,
-                "nripetizioni": 0,
-                "descrizione": "descrizione"
-            },
-            {
-                "id" : 0,
-                "nome" : "nome",
-                "tempo_recupero": 0,
-                "peso": 0,
-                "nserie": 0,
-                "nripetizioni": 0,
-                "descrizione": "descrizione"
-            },
-            ...
-        ],
-        ...
-    ]
-}
-*/
-
-                  /*
-var SchedeDatabase={
-  scheda1:{
-    username: "Luca",
-    id : 1,
-    nome : "panca piana",
-    tempo_recupero : 120,
-    peso : 20,
-    nserie : 4,
-    nripetizioni : 90,
-    descrizione : "usa la panca piana"
-  },
-  scheda2:{
-    username: "Federico",
-    id : 2,
-    nome : "addominali",
-    tempo_recupero : 240,
-    peso : 10,
-    nserie : 7,
-    nripetizioni : 10,
-    descrizione : "fai degli addominali"
-  },
-  scheda3:{
-    username: "Sara",
-    id : 3,
-    nome : "flessioni",
-    tempo_recupero : 60,
-    peso : 20,
-    nserie : 2,
-    nripetizioni : 20,
-    descrizione : "fai delle flessioni"
-  }
-}*/
-/*
-var schede = {
-    "username": "username",
-    "esercizi":[
-        [
-            {
-                "id" : 0,
-                "nome" : "nome",
-                "tempo_recupero": 0,
-                "peso": 0,
-                "nserie": 0,
-                "nripetizioni": 0,
-                "descrizione": "descrizione"
-            },
-            {
-                "id" : 0,
-                "nome" : "nome",
-                "tempo_recupero": 0,
-                "peso": 0,
-                "nserie": 0,
-                "nripetizioni": 0,
-                "descrizione": "descrizione"
-            },
-            ...
-        ],
-        [
-            {
-                "id" : 0,
-                "nome" : "nome",
-                "tempo_recupero": 0,
-                "peso": 0,
-                "nserie": 0,
-                "nripetizioni": 0,
-                "descrizione": "descrizione"
-            },
-            {
-                "id" : 0,
-                "nome" : "nome",
-                "tempo_recupero": 0,
-                "peso": 0,
-                "nserie": 0,
-                "nripetizioni": 0,
-                "descrizione": "descrizione"
-            },
-            ...
-        ],
-        ...
-    ]
-
-*/

@@ -1,7 +1,5 @@
 /*
  * TODO:
- *  In POST method, check if the exercise object contains at least a field
- *  Update the database with id instead of username
  */
 
 var express = require('express');
@@ -19,7 +17,7 @@ app.listen(port, function() {
 //-----------------------------------------------------------------------//
 // Database
 var storicoDB = {
-  "giovanni": {
+  1: {
       "1575849599": {
           addominali: 10,
           piegamenti: 20,
@@ -30,14 +28,14 @@ var storicoDB = {
         pesi: 10
     }
   },
-  "alberto": {
+  2: {
     "1575849599": {
         addominali: 10,
         piegamenti: 20,
         pesi: 30
     }
   },
-  "pietro": {
+  3: {
     "1575849599": {
         addominali: 10,
         piegamenti: 20,
@@ -62,17 +60,17 @@ app.post('/storico', function(req, res){
   console.log('POST storico');
   let code = 503;
   let json = req.body;
-  let username = json["username"];
+  let id = json["id"];
   let data = json["data"];
   let esercizi = json["esercizi"];
-  if (username && data && esercizi){
-    if (!storicoDB[username]){
-      storicoDB[username] = {}
+  if (id && data && esercizi && size(esercizi) > 0){
+    if (!storicoDB[id]){
+      storicoDB[id] = {}
     }
-    if (!storicoDB[username][data]){
-      storicoDB[username][data] = {}
+    if (!storicoDB[id][data]){
+      storicoDB[id][data] = {}
     }
-    storicoDB[username][data] = esercizi;
+    storicoDB[id][data] = esercizi;
 
     res.response={
       error: null,
@@ -81,7 +79,7 @@ app.post('/storico', function(req, res){
     code = 200;
   } else {
     res.response={
-      error: "Error. Username or data or esercizi are INVALID"
+      error: "Error. id or data or esercizi are INVALID"
     };
     code = 422;
   }
@@ -91,16 +89,16 @@ app.post('/storico', function(req, res){
 });
 
 // get storico GET
-app.get('/storico/:username/:data_inizio/:data_fine', function(req, res){
+app.get('/storico/:id/:data_inizio/:data_fine', function(req, res){
     console.log('GET storico');
-    let username = req.params.username;
+    let id = req.params.id;
     let data_inizio = req.params.data_inizio;
     let data_fine = req.params.data_fine;
     let storico = [];
-    if (username && data_inizio && data_fine && data_fine > data_inizio){
-      for (key in storicoDB[username]){
+    if (id && data_inizio && data_fine && data_fine > data_inizio){
+      for (key in storicoDB[id]){
         if (key >= data_inizio && key <= data_fine){
-          storico.push(storicoDB[username]);
+          storico.push(storicoDB[id]);
         }
       }
       if (storico.length == 0){
@@ -115,7 +113,7 @@ app.get('/storico/:username/:data_inizio/:data_fine', function(req, res){
       }
     } else {
       code = 422;
-      res.response={error:"Error. Username or dates are INVALID"};
+      res.response={error:"Error. id or dates are INVALID"};
     }
 
     res.status(code);
@@ -128,18 +126,18 @@ app.put('/storico', function(req, res){
   let code = 503;
   let sent = [];
   let json = req.body;
-  let username = json["username"];
+  let id = json["id"];
   let data = json['data'];
   let update = json['update'];
-  if (username && data && update){
-    if (storicoDB[username][data]){
+  if (id && data && update){
+    if (storicoDB[id][data]){
       for (var key in update){
-        var val = storicoDB[username][data][key];
+        var val = storicoDB[id][data][key];
         if (update == 0){
           delete update[key];
         } else if (val || update[key] > 0) {
           // if key exists
-          storicoDB[username][data][key] = update[key];
+          storicoDB[id][data][key] = update[key];
         } else {
           console.log('Error. Unexpected value: ' + key + ' ' + update[key]);
           sent.push(key);
@@ -160,7 +158,7 @@ app.put('/storico', function(req, res){
     }
   } else {
     res.response={
-      error : 'Error. Username or data or esercizi are INVALID'
+      error : 'Error. id or data or esercizi are INVALID'
     };
     code = 422;
   }
@@ -174,11 +172,11 @@ app.delete('/storico', function(req, res){
   console.log('DELETE storico');
   let code = 503;
   let json = req.body;
-  let username = json["username"];
+  let id = json["id"];
   let data_to_del = json['data_to_del'];
-  if (username && data_to_del){
-    if (storicoDB[username] && storicoDB[username][data_to_del]){
-      delete storicoDB[username][data_to_del];
+  if (id && data_to_del){
+    if (storicoDB[id] && storicoDB[id][data_to_del]){
+      delete storicoDB[id][data_to_del];
       res.response={
         error : null,
         delete: 'Del completed'
@@ -193,7 +191,7 @@ app.delete('/storico', function(req, res){
     }
   } else {
     res.response={
-      error : 'Error. Username or data to del are INVALID'
+      error : 'Error. id or data to del are INVALID'
     };
     code = 422;
   }

@@ -13,7 +13,7 @@
   "author": "Francesco Pavanello",
   "license": "ISC",
   "dependencies": {
-    "express": "^6.13.2"
+    "express": "^4.17.1"
   },
   "bugs": {
     "url": "https://github.com/francescopasqualini/SpeedWagonFoundation/issues"

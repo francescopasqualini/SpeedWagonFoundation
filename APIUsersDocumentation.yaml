@@ -1,0 +1,203 @@
+swagger: '2.0'
+info:
+  version: '1.0'
+  title: "progettois2 "
+  description: Our API allow users to fetch many informations about their gym and their progresses
+
+# You should put here the URL to your Heroku instance    
+host: se2-movies.herokuapp.com
+basePath: /
+schemes:
+- http
+consumes:
+- application/json
+produces:
+- application/json
+paths:
+  /users:
+    # x-summary: Users collection
+    get:
+      summary: List all users in the database
+      consumes:
+      - application/json
+      produces:
+      - application/json      
+      responses:
+        200:
+          description: Successful Response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/user'
+            example:
+              - id: 45
+                password: 12345
+                name: Mario
+                surname: Rossi
+                email: example@email.com
+                username: Alejoker
+                isPt: false
+              - id: 46
+                password: qwerty
+                name: Bruno
+                surname: Bianchi
+                email: mail@example.com
+                username: VonStaben
+                isPt: true
+    post:
+      description: >-
+        You may create a user using this action. It takes a JSON
+        object containing the properties of a user.
+      summary: Create a new user
+      consumes:
+      - application/json
+      produces:
+      - application/json       
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/userRequest'
+      responses:
+        200:
+          description: Successful Response
+  /users/{userId}:
+    get:
+      summary: Returns a user by ID.
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        description: Parameter description in CommonMark or HTML.
+        type : integer
+        format: int64
+        minimum: 1
+      responses: 
+        200:
+          description: Successful Response
+          schema:
+            $ref: '#/definitions/user'
+    delete:
+      summary: Delete a user by ID.
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        description: Parameter description in CommonMark or HTML.
+        type : integer
+        format: int64
+        minimum: 1
+      responses:
+        200:
+          description: Successful Response
+    put:
+      summary: modify a user by ID.
+      consumes:
+      - application/json
+      produces:
+      - application/json  
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        description: Parameter description in CommonMark or HTML.
+        type : integer
+        format: int64
+        minimum: 1
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/userRequest'
+           
+      responses:
+        200:
+          description: Successful Response
+            
+    
+    
+
+
+definitions:
+  # This is just a simple model for that defines the Primary Key
+  # We could reuse this on the rest of our models.
+  PK:
+    type: object
+    properties:
+      id:
+        type: number
+        description: The identifier.
+        
+  # This is a base Movie model that "packs" the basic properties
+  # to avoid repeating ourselves.
+  user:
+    title: user
+    type: object
+    properties:
+      id:
+         type: number
+         readOnly: true
+         description: the id of the user. Read only
+      password:
+        type: string
+        description: the password of the user
+      name:
+        type: string
+        description: the name of the user
+      surname:
+        type: string
+        description: the surname of the user
+      email:
+        type: string
+        description: the email of the user
+      username:
+        type: string
+        description: the username of the user
+      isPt:
+        type: string
+        description: indicate if the user is a personal trainer or not
+    example:
+        id: 46
+        password: qwerty
+        name: Bruno
+        surname: Bianchi
+        email: mail@example.com
+        username: VonStaben
+        isPt: true
+  userRequest:
+    title: user
+    type: object
+    properties:
+      password:
+        type: string
+        description: the password of the user
+        
+      name:
+        type: string
+        description: the name of the user
+        
+      surname:
+        type: string
+        description: the surname of the user
+        
+      email:
+        
+        type: string
+        description: the email of the user
+        
+      username:
+        type: string
+        description: the username of the user
+        
+      isPt:
+        type: string
+        description: indicate if the user is a personal trainer or not
+        
+    example:
+        password: qwerty
+        name: Bruno
+        surname: Bianchi
+        email: mail@example.com
+        username: VonStaben
+        isPt: true

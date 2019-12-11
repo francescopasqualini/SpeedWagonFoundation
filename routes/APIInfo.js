@@ -1,13 +1,5 @@
-var express = require('express');
-var app = express();
-
-app.use(express.json());
-
-const port =  process.env.PORT ||  3000;
-
-app.listen(port, function() {
-  console.log('Server running on port ', port);
-});
+const express = require('express');
+const router = express.Router();
 
 var infoDb = [
   {
@@ -40,13 +32,13 @@ var infoDb = [
 ];
 
 //search GET
-app.get('/info', function (req, res){
+router.get('/info', function (req, res){
   res.status(200);
   res.json(infoDb);
 });
 
 //search by type GET
-app.get('/info/:type', function (req, res){
+router.get('/info/:type', function (req, res){
   const typeToRetrive = req.params.type;
   var found = false;
   var response = [];
@@ -66,7 +58,7 @@ app.get('/info/:type', function (req, res){
 });
 
 //search a specific field of a type GET
-app.get('/info/:type/:key', function (req, res){
+router.get('/info/:type/:key', function (req, res){
   const typeToRetrive = req.params.type;
   const keyToRetrive = req.params.key;
   var found = false;
@@ -91,7 +83,7 @@ app.get('/info/:type/:key', function (req, res){
 });
 
 //add new info POST
-app.post('/info', function (req, res){
+router.post('/info', function (req, res){
   let newInfo = req.body;
   if (req.body["type"]==undefined){
     res.status(400);
@@ -117,7 +109,7 @@ app.post('/info', function (req, res){
 });
 
 //modify existing info PUT
-app.put('/info/:type', function (req, res){
+router.put('/info/:type', function (req, res){
   const typeToModify = req.params.type;
   var found = false;
   for (var i=0; i < infoDb.length; i++){
@@ -145,7 +137,7 @@ app.put('/info/:type', function (req, res){
 });
 
 //delete completely existing info DELETE
-app.delete('/info/:type', function(req,res){
+router.delete('/info/:type', function(req,res){
   const typeToDelete = req.params.type;
   var found = false;
   for (var i=0; i < infoDb.length; i++){
@@ -195,3 +187,5 @@ app.delete('/info/:type/:key', function(req,res){
     res.json({OK: "Info eliminata con successo!"});
   }
 });
+
+module.exports = router;

@@ -1,1 +1,1 @@
-web: node APIInfo.js
+web: node server.js

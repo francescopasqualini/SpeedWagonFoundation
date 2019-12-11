@@ -1,3 +1,9 @@
+/*
+ * TODO:
+ *  In POST method, check if the exercise object contains at least a field
+ *  Update the database with id instead of username
+ */
+
 var express = require('express');
 var app = express();
 
@@ -25,6 +31,13 @@ var storicoDB = {
     }
   },
   "alberto": {
+    "1575849599": {
+        addominali: 10,
+        piegamenti: 20,
+        pesi: 30
+    }
+  },
+  "pietro": {
     "1575849599": {
         addominali: 10,
         piegamenti: 20,
@@ -86,7 +99,7 @@ app.get('/storico/:username/:data_inizio/:data_fine', function(req, res){
     let storico = [];
     if (username && data_inizio && data_fine && data_fine > data_inizio){
       for (key in storicoDB[username]){
-        if (key > data_inizio && key < data_fine){
+        if (key >= data_inizio && key <= data_fine){
           storico.push(storicoDB[username]);
         }
       }
@@ -104,6 +117,7 @@ app.get('/storico/:username/:data_inizio/:data_fine', function(req, res){
       code = 422;
       res.response={error:"Error. Username or dates are INVALID"};
     }
+
     res.status(code);
     res.send(res.response);
 });
@@ -112,6 +126,7 @@ app.get('/storico/:username/:data_inizio/:data_fine', function(req, res){
 app.put('/storico', function(req, res){
   console.log('PUT storico');
   let code = 503;
+  let sent = [];
   let json = req.body;
   let username = json["username"];
   let data = json['data'];
@@ -122,28 +137,34 @@ app.put('/storico', function(req, res){
         var val = storicoDB[username][data][key];
         if (update == 0){
           delete update[key];
-        } else if (val) {
+        } else if (val || update[key] > 0) {
           // if key exists
-          storicoDB[username][data][key] += update[key];
-        } else if (update[key] > 0){
-          // if key not exists
           storicoDB[username][data][key] = update[key];
         } else {
           console.log('Error. Unexpected value: ' + key + ' ' + update[key]);
+          sent.push(key);
         }
       }
     }
-    res.response={
-      error : null,
-      done : 'Update completed.'
-    };
-    code = 200;
+    if (sent.length == 0){
+      res.response={
+        error : null,
+        done : 'Update completed.'
+      };
+      code = 200;
+    } else {
+      res.response={
+        error : "All values are modified except for: " + sent + "."
+      };
+      code = 200;
+    }
   } else {
     res.response={
       error : 'Error. Username or data or esercizi are INVALID'
     };
     code = 422;
   }
+
   res.status(code)
   res.json(res.response);
 });
@@ -156,7 +177,7 @@ app.delete('/storico', function(req, res){
   let username = json["username"];
   let data_to_del = json['data_to_del'];
   if (username && data_to_del){
-    if (storicoDB[username][data_to_del]){
+    if (storicoDB[username] && storicoDB[username][data_to_del]){
       delete storicoDB[username][data_to_del];
       res.response={
         error : null,

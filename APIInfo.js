@@ -42,7 +42,7 @@ var infoDb = [
 //search GET
 app.get('/info', function (req, res){
   res.status(200);
-  res.send(infoDb);
+  res.json(infoDb);
 });
 
 //search by type GET
@@ -58,10 +58,10 @@ app.get('/info/:type', function (req, res){
   }
   if (!found){
     res.status(404);
-    res.send("ERRORE! TYPE NON ESISTENTE!");
+    res.json({ERRORE: "Type non esistente!"});
   } else {
     res.status(200);
-    res.send(response);
+    res.json(response);
   }
 });
 
@@ -75,7 +75,7 @@ app.get('/info/:type/:key', function (req, res){
     if(infoDb[i].type == typeToRetrive){
       for (var key in infoDb[i]){
         if(key == keyToRetrive){
-          response.push(infoDb[i][key]);
+          response.push({[key]: infoDb[i][key]});
           found = true;
         }
       }
@@ -83,20 +83,37 @@ app.get('/info/:type/:key', function (req, res){
   }
   if (!found){
     res.status(404);
-    res.send("ERRORE! TYPE NON ESISTENTE!");
+    res.json({ERRORE: "Type non esistente!"});
   } else {
     res.status(200);
-    res.send(response);
+    res.json(response);
   }
 });
 
 //add new info POST
 app.post('/info', function (req, res){
   let newInfo = req.body;
-  infoDb.push(newInfo);
-  res.location('/info/' + newInfo.type);
-  res.status(204);
-  res.send("Info Aggiunta");
+  if (req.body["type"]==undefined){
+    res.status(400);
+    res.json({ERRORE: "Campo type non presente!"});
+  } 
+  else {
+    var found = false;
+    for( var i=0; i<infoDb.length; i++){
+      if(req.body["type"]==infoDb[i]["type"]){
+        found = true;
+      }
+    }
+    if(found){
+      res.status(400);
+      res.json({ERRORE: "Campo type già presente!"});
+    } else {
+      infoDb.push(newInfo);
+      res.location('/info/' + newInfo.type);
+      res.status(201);
+      res.json({OK: "Info creata con successo!"});
+    }
+  }
 });
 
 //modify existing info PUT
@@ -106,26 +123,24 @@ app.put('/info/:type', function (req, res){
   for (var i=0; i < infoDb.length; i++){
     if(infoDb[i].type == typeToModify){
       found = true;
-      var modified = false;
       for (var key1 in infoDb[i]){
         for (var key2 in req.body){
           if (key1 == key2){
-            modified = true;
             infoDb[i][key1] = req.body[key2];
+          } else {
+            infoDb[i][key2] = req.body[key2];
           }
         }
       }
-      if (!modified){
-        infoDb[i][key2] = req.body[key2];
-      }
+      
     }
   }
   if (!found){
     res.status(404);
-    res.send("ERRORE! TYPE NON ESISTENTE!");
+    res.json({ERRORE: "Type già esistente!"});
   } else {
     res.status(200);
-    res.send("Modifica effettuata con successo");
+    res.json({OK: "Info modificata con successo!"});
   }
 });
 
@@ -141,10 +156,10 @@ app.delete('/info/:type', function(req,res){
   }
   if (!found){
     res.status(404);
-    res.send("ERRORE! TYPE NON ESISTENTE!");
+    res.json({ERRORE: "Type non esistente!"});
   } else {
     res.status(200);
-    res.send("Info eliminata con successo");
+    res.json({OK: "Info eliminata con successo!"});
   }
 });
 
@@ -165,18 +180,18 @@ app.delete('/info/:type/:key', function(req,res){
       }
       if (keyToDelete == "type"){
         res.status(500);
-        res.send("ERROR! IMPOSSIBILE ELIMINARE IL CAMPO RICHIESTO")
+        res.json({ERRORE: "Impossibile eliminare il campo type!"});
       } else if (!deleted){
         res.status(404);
-        res.send("ERROR! CAMPO NON ESISTENTE");
+        res.json({ERRORE: "Campo non esistente!"});
       }
     }
   }
   if (!found){
     res.status(404);
-    res.send("ERRORE! TYPE NON ESISTENTE!");
+    res.json({ERRORE: "Type non esistente!"});
   } else {
     res.status(200);
-    res.send("Info eliminata con successo");
+    res.json({OK: "Info eliminata con successo!"});
   }
 });

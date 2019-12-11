@@ -3,7 +3,6 @@ info:
   version: '1.0'
   title: "progettois2 "
   description: Our API allow users to fetch many informations about their gym and their progresses
-
 # You should put here the URL to your Heroku instance    
 host: se2-movies.herokuapp.com
 basePath: /
@@ -44,6 +43,11 @@ paths:
                 email: mail@example.com
                 username: VonStaben
                 isPt: true
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/error500'
+          
     post:
       description: >-
         You may create a user using this action. It takes a JSON
@@ -62,6 +66,11 @@ paths:
       responses:
         200:
           description: Successful Response
+        400:
+          description: The json in the request doesn't  contain all the required fields or some unrequired fields are present
+          schema:
+            $ref: '#/definitions/error400'
+    
   /users/{userId}:
     get:
       summary: Returns a user by ID.
@@ -69,7 +78,7 @@ paths:
       - name: userId
         in: path
         required: true
-        description: Parameter description in CommonMark or HTML.
+        description: The id of the required user
         type : integer
         format: int64
         minimum: 1
@@ -78,21 +87,32 @@ paths:
           description: Successful Response
           schema:
             $ref: '#/definitions/user'
+        404:
+          description: The required id was not found
+          schema:
+            $ref: '#/definitions/error404'
     delete:
       summary: Delete a user by ID.
       parameters:
       - name: userId
         in: path
         required: true
-        description: Parameter description in CommonMark or HTML.
+        description: The id of the required user
         type : integer
         format: int64
         minimum: 1
       responses:
         200:
           description: Successful Response
+        404:
+          description: The required id was not found
+          schema:
+            $ref: '#/definitions/error404'
     put:
-      summary: modify a user by ID.
+      summary: Modify a user by ID.
+      description: >-
+        You may modify a user using this action. It takes a JSON
+        object containing the properties of a user that have to be modified.
       consumes:
       - application/json
       produces:
@@ -101,7 +121,7 @@ paths:
       - name: userId
         in: path
         required: true
-        description: Parameter description in CommonMark or HTML.
+        description: The id of the required user
         type : integer
         format: int64
         minimum: 1
@@ -114,11 +134,22 @@ paths:
       responses:
         200:
           description: Successful Response
+          schema:
+            $ref: '#/definitions/user'
+        400:
+          description: The json in the request contains some unrequired fields
+          schema:
+            $ref: '#/definitions/error400'
+        404:
+          description: The required id was not found
+          schema:
+            $ref: '#/definitions/error404'
             
     
     
-
-
+tags:
+  - name: user
+    description: Everything about your Pets
 definitions:
   # This is just a simple model for that defines the Primary Key
   # We could reuse this on the rest of our models.
@@ -136,7 +167,7 @@ definitions:
     type: object
     properties:
       id:
-         type: number
+         type: integer
          readOnly: true
          description: the id of the user. Read only
       password:
@@ -155,8 +186,8 @@ definitions:
         type: string
         description: the username of the user
       isPt:
-        type: string
-        description: indicate if the user is a personal trainer or not
+        type: boolean
+        description: indicates if the user is a personal trainer or not
     example:
         id: 46
         password: qwerty
@@ -191,8 +222,8 @@ definitions:
         description: the username of the user
         
       isPt:
-        type: string
-        description: indicate if the user is a personal trainer or not
+        type: boolean
+        description: indicates if the user is a personal trainer or not
         
     example:
         password: qwerty
@@ -201,3 +232,31 @@ definitions:
         email: mail@example.com
         username: VonStaben
         isPt: true
+  error500:
+    title: error
+    type: object
+    properties:
+      error: 
+        type: string
+        description: type of error
+    example: 
+      error: server error
+  error400:
+    title: error
+    type: object
+    properties:
+      error: 
+        type: string
+        description: type of error
+    example: 
+      error: bad request
+  error404:
+    title: error
+    type: object
+    properties:
+      error: 
+        type: string
+        description: type of error
+    example: 
+      error: id not found
+      

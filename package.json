@@ -11,7 +11,7 @@
     "url": "git+https://github.com/francescopasqualini/SpeedWagonFoundation.git"
   },
   "author": "Francesco Pavanello",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "express": "^4.17.1"
   },

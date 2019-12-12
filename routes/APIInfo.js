@@ -43,14 +43,14 @@ router.get('/:id', function (req, res){
   var found = false;
   var response = [];
   for (var i=0; i < infoDb.length; i++){
-    if(infoDb[i][id] == idToRetrive){
+    if(infoDb[i].id == idToRetrive){
       found = true;
       response.push(infoDb[i]);
     }
   }
   if (!found){
     res.status(404);
-    res.json({ERRORE:  "Id non esistente!"});
+    res.json({ERRORE: "Id non esistente!"});
   } else {
     res.status(200);
     res.json(response);
@@ -64,7 +64,7 @@ router.get('/:id/:key', function (req, res){
   var found = false;
   var response = [];
   for (var i=0; i < infoDb.length; i++){
-    if(infoDb[i][id] == idToRetrive){
+    if(infoDb[i].id == idToRetrive){
       for (var key in infoDb[i]){
         if(key == keyToRetrive){
           response.push({[key]: infoDb[i][key]});
@@ -75,7 +75,7 @@ router.get('/:id/:key', function (req, res){
   }
   if (!found){
     res.status(404);
-    res.json({ERRORE:  "Id non esistente!"});
+    res.json({ERRORE: "Id non esistente!"});
   } else {
     res.status(200);
     res.json(response);
@@ -85,7 +85,7 @@ router.get('/:id/:key', function (req, res){
 //add new info POST
 router.post('/', function (req, res){
   let newInfo = req.body;
-  if (req.body["id"]==undefined){
+  if (req.body.id==undefined){
     res.status(400);
     res.json({ERRORE: "Campo id non presente!"});
   } 
@@ -112,16 +112,20 @@ router.post('/', function (req, res){
 router.put('/:id', function (req, res){
   const idToModify = req.params.id;
   var found = false;
+  var response = [];
   for (var i=0; i < infoDb.length; i++){
-    if(infoDb[i][id] == idToModify){
+    if(infoDb[i].id == idToModify){
       found = true;
+      var done = false;
       for (var key1 in infoDb[i]){
         for (var key2 in req.body){
           if (key2 == "id"){
-            res.status(500);
-            res.json({ERRORE: "Impossibile eliminare il campo id!"});
+            if (!done){
+              done = true;
+              response.push({ERRORE: "Impossibile modificare il campo id! Il resto delle modifiche è andato a buon fine."});
+            }
           }
-          if (key1 == key2){
+          else if (key1 == key2){
             infoDb[i][key1] = req.body[key2];
           } else {
             infoDb[i][key2] = req.body[key2];
@@ -136,7 +140,10 @@ router.put('/:id', function (req, res){
     res.json({ERRORE: "Id non esistente!"});
   } else {
     res.status(200);
-    res.json({OK: "Info modificata con successo!"});
+    if (!done){
+      response.push({OK: "Info modificata con successo!"});
+    }
+    res.json(response);
   }
 });
 
@@ -145,7 +152,7 @@ router.delete('/:id', function(req,res){
   const idToDelete = req.params.id;
   var found = false;
   for (var i=0; i < infoDb.length; i++){
-    if(infoDb[i][id] == idToDelete){
+    if(infoDb[i].id == idToDelete){
       found = true;
       infoDb.splice(i,1);
     }
@@ -165,7 +172,7 @@ router.delete('/:id/:key', function(req,res){
   const keyToDelete = req.params.key;
   var found = false;
   for (var i=0; i < infoDb.length; i++){
-    if(infoDb[i][id] == idToModify){
+    if(infoDb[i].id == idToModify){
       found = true;
       var deleted = false;
       for (var key1 in infoDb[i]){

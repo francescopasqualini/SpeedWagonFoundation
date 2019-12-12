@@ -10,7 +10,7 @@ app.use('/info', infoRouter);
 const schedeRouter = require('./routes/APIschede');
 app.use('/schede', schedeRouter);
 const storicoRouter = require('./routes/APIstorico');
-app.use('/schede', storicoRouter);
+app.use('/storico', storicoRouter);
 
 app.get('/', function(req, res){
   res.status(200);

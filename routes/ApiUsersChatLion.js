@@ -70,7 +70,7 @@ router.use('/chat/:idFrom/:idTo?/:idMessage?', function (req, res, next) {
 })
 
 
-/********* /chat api **********/s
+/********* /chat api **********/
 
 /* Retrieve the whole dbchat. For testing purposes*/
 router.get('/chat', function (req, res) {

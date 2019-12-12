@@ -68,7 +68,7 @@ paths:
             $ref: '#/definitions/userRequestPost'
       responses:
         200:
-          description: Successful Response
+          description: Successful Response. The created user is returned
           schema:
             $ref: '#/definitions/user'
         400:
@@ -116,7 +116,9 @@ paths:
         minimum: 1
       responses:
         200:
-          description: Successful Response
+          description: Successful Response, the deleted user is returned
+          schema:
+            $ref: '#/definitions/user'
         404:
           description: The required id was not found
           schema:
@@ -150,7 +152,7 @@ paths:
            
       responses:
         200:
-          description: Successful Response
+          description: Successful Response, the modified user is returned
           schema:
             $ref: '#/definitions/user'
         400:

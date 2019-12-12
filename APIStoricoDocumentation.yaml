@@ -1,0 +1,247 @@
+swagger: '2.0'
+info:
+  version: '1.0'
+  title: "progettois2 "
+  description: Our API allow users to fetch many informations about their gym and their progresses
+# You should put here the URL to your Heroku instance    
+host: se2-movies.herokuapp.com
+basePath: /
+schemes:
+- http
+consumes:
+- application/json
+produces:
+- application/json
+paths:
+  /sotrico:
+    # x-summary: Users collection
+    post:
+      description: >-
+        You can add a user log using this method
+      summary: Create a new log
+      consumes:
+      - application/json
+      produces:
+      - application/json       
+      parameters:
+        - id: body
+          timestamp: body
+          esercizi: body
+          ripetizioni: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/postStorico'
+      responses:
+        200:
+          description: Successful Response
+          schema:
+            $ref: '#/definition/error200'
+        400:
+          description: The request has at least one invalid parameter
+          schema:
+            $ref: '#/definitions/error400'
+
+    delete:
+      summary: Delete history by timestamp.
+      parameters:
+      - id: body
+        data_to_del: body
+        required: true
+        in: body
+        description: >
+          You can use this method to delete an history log about a specific user.
+      responses:
+        200:
+          description: Successful Response
+          schema:
+            $ref: '#/definition/error200'
+        404:
+          description: The required id was not found
+          schema:
+            $ref: '#/definitions/error404'
+
+    put:
+      summary: Modify an history by id, timestamp and exercises.
+      description: >-
+        If you wrong a log you may use this method to update it.
+      consumes:
+      - application/json
+      produces:
+      - application/json  
+      parameters:
+      - id: body
+        timestamp: body
+        update: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/postStorico'
+      responses:
+        200:
+          description: Successful Response
+          schema:
+            $ref: '#/definitions/error200'
+        422:
+          description: The json in the request contains some unrequired fields
+          schema:
+            $ref: '#/definitions/error422'
+        404:
+          description: The required id was not found
+          schema:
+            $ref: '#/definitions/error404'
+
+  /storico/{id}/{timestamp_start}/{timestamp_stop}:
+    get:
+      summary: Returns a user history by ID.
+      parameters:
+      - id: id
+        timestamp_stop: timestamp_stop
+        in: path
+        required: true
+        description: The id of the required user
+        type : integer
+        format: int64
+        minimum: 1
+      - timestamp_start: timestamp_start
+        in: path
+        required: true
+        description: The timestamp of the initial temporal gap
+        type : integer
+        format: int64
+        minimum: 1
+      - timestamp_stop: timestamp_stop
+        in: path
+        required: true
+        description: The timestamp of the final temporal gap
+        type : integer
+        format: int64
+        minimum: 1
+      responses: 
+        200:
+          description: Successful Response
+          schema:
+            title: storico
+            type: object
+            properties:
+              storico: '#/definitions/storico'
+            example:
+              storico:
+              - timestamp: 1575849599
+                esercizi:
+                - addominali
+                - piegamenti
+                - pesi
+                ripetizioni:
+                - 10
+                - 20
+                - 30
+              - timestamp: 1575935999
+                esercizi:
+                - piegamenti
+                - pesi
+                ripetizioni:
+                - 30
+                - 10
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error404'
+        422:
+          description: Malformed Input
+          schema:
+            $ref: '#/definitions/error422'
+            
+    
+    
+tags:
+  - name: user
+    description: Everything about your Pets
+definitions:
+  # This is just a simple model for that defines the Primary Key
+  # We could reuse this on the rest of our models.
+  PK:
+    type: object
+    properties:
+      id:
+        type: number
+        description: The identifier.
+        
+  # This is a base Movie model that "packs" the basic properties
+  # to avoid repeating ourselves.
+  storico:
+    type: array
+    items:
+      type: object
+      properties:
+        timestamp: integer
+        esercizi:
+          type: array
+          items: 
+            type: string
+        ripetizioni:
+          type: array
+          items: 
+            type: integer
+      example:
+        timestamp: 1575849599
+        esercizi:
+        - addominali
+        - piegamenti
+        - pesi
+        ripetizioni:
+        - 10
+        - 20
+        - 30
+
+  postStorico:
+    type: object
+    properties:
+      timestamp: integer
+      esercizi:
+        type: array
+        items:
+          type: string
+      ripetizioni:
+        type: array
+        items:
+          type: integer
+    example:
+      id: 4
+      timestamp: 1576022399
+      esercizi:
+      - addominali
+      - piegamenti
+      - squat
+      ripetizioni:
+      - 20
+      - 50
+      - 1
+
+  error200:
+    title: success
+    type: object
+    properties:
+      type: string
+      description: Type of success
+    example:
+      success: Added 3 exericises.
+  error404:
+    title: error
+    type: object
+    properties:
+      error: 
+        type: string
+        description: type of error
+    example: 
+      error: Storico Not found
+  error422:
+    title: error
+    type: object
+    properties:
+      error: 
+        type: string
+        description: type of error
+    example: 
+      error: Error. id or dates are INVALID
+      

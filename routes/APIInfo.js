@@ -122,7 +122,7 @@ router.put('/:id', function (req, res){
           if (key2 == "id"){
             if (!done){
               done = true;
-              response.push({ERRORE: "Impossibile modificare il campo id! Il resto delle modifiche è andato a buon fine."});
+              response.push({ERRORE: "Impossibile modificare il campo id! Il resto delle modifiche (se presenti) sono andate a buon fine."});
             }
           }
           else if (key1 == key2){

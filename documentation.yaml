@@ -164,7 +164,7 @@ paths:
             
   /info/{id}/{key}:
   
-    x-summary: One specific field of an informatio
+    x-summary: One specific field of an information
     get:
       summary: Retrive the specified field of the specified information
       parameters:

@@ -1,0 +1,8 @@
+{
+    "error": "Auth Failed | null",
+
+    "name": "name | null",
+    "surname": "surname | null",
+    "email": "email | null",
+    "isPT": true
+}

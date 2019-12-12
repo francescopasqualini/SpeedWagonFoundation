@@ -53,13 +53,5 @@
   * Test inserimento miglioramenti
   * Test visualizzazione grafico dei miglioramenti
 
-
-
-
-
 ## SPRINT:
-il primo backlog sprint prevede di fare le user stories N.1/N.5
-
-
-
-
+il primo backlog sprint prevede di fare le user stories dalla N1 alla N5

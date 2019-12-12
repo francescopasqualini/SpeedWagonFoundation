@@ -21,7 +21,9 @@ app.get('/', function(req, res){
     {
       FrancescoPavanello: "/info",
       LucaStaboli: "/schede",
-      FrancescoPasqualini: "/storico"
+      FrancescoPasqualini: "/storico",
+      JacopoSitran: "/users",
+      AlessioValenza: "/chat"
     })
 })
 

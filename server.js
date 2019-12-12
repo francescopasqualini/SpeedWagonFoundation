@@ -9,13 +9,16 @@ const infoRouter = require('./routes/APIInfo');
 app.use('/info', infoRouter);
 const schedeRouter = require('./routes/APIschede');
 app.use('/schede', schedeRouter);
+const storicoRouter = require('./routes/APIstorico');
+app.use('/schede', storicoRouter);
 
 app.get('/', function(req, res){
   res.status(200);
   res.json(
     {
       FrancescoPavanello: "/info",
-      LucaStaboli: "/schede" 
+      LucaStaboli: "/schede",
+      FrancescoPasqualini: "/storico"
     })
 })
 

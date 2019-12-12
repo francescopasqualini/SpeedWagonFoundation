@@ -3,7 +3,7 @@ var app = express();
 
 app.use(express.json());
 
-//const port = process.env.PORT ||  3000;
+
 const port = process.env.PORT || 3000;
 
 app.listen(port, function () {
@@ -15,7 +15,7 @@ var serverError = { error: "server error" }
 
 
 
-//qui metto tutta la parte del "DB"
+
 
 var utentiDatabase = {
     1: {
@@ -39,31 +39,40 @@ var utentiDatabase = {
 };
 var dim = 2;
 
-//API search GET
-//input: username di un utente
-//output : la scheda di tale utente
-//FUNZIONANTE
+
 app.get('/users', function (req, res) {
     console.log('API_1');
     try {
         let utentiDatabaseArray = []
-        /*utentiDatabaseArray.push(utentiDatabase["1"])
-        utentiDatabaseArray.push(utentiDatabase["2"])*/
         Object.keys(utentiDatabase).forEach(element => {
             utentiDatabaseArray.push(utentiDatabase[element])
         });
-        /*var risposta={};
-        for(var key in utentiDatabase){
-            var tmp = risposta
-            var risposta  = merge(tmp,utentiDatabase[key])
-            console.log(typeof(risposta))
-            console.log(typeof(utentiDatabase[key]))
-            
-        }*/
-        console.log(utentiDatabaseArray[1])
-        //var risposta={"users":utentiDatabaseArray}
-        res.status(200)
-        res.json(utentiDatabaseArray);
+
+        var limit = req.query.limit
+        var offset = req.query.offset
+        console.log(limit)
+        console.log(offset)
+        if (limit == undefined || offset == undefined) {
+            res.status(200)
+            res.json(utentiDatabaseArray);
+        } else {
+            let tmpArray = []
+            for (let index = offset; index < utentiDatabaseArray.length && index < (offset + limit); index++) {
+                console.log(index)
+                console.log(utentiDatabaseArray[index])
+                tmpArray.push(utentiDatabaseArray[index])
+
+            }
+            let risposta = {
+                results: tmpArray,
+                metadata: {
+                    total: utentiDatabaseArray.length
+                }
+            }
+            res.status(200)
+            res.json(risposta);
+        }
+
     } catch (error) {
         res.status(500)
         res.json(serverError)
@@ -72,9 +81,6 @@ app.get('/users', function (req, res) {
 
 });
 
-//API create POST
-//input: i parametri della scheda
-//output: il json della schedaL
 app.get('/users/:id', function (req, res) {
     try {
 
@@ -85,7 +91,7 @@ app.get('/users/:id', function (req, res) {
         if (response === undefined) {
             console.log("404")
             res.status(404)
-            res.send(notFound)
+            res.json(notFound)
         }
         else {
             console.log("200")
@@ -110,7 +116,7 @@ app.delete('/users/:id', function (req, res) {
         if (response === undefined) {
             console.log(response)
             res.status(404)
-            res.send(notFound)
+            res.json(notFound)
         } else {
             let tmp = utentiDatabase[id]
             delete utentiDatabase[id]
@@ -125,9 +131,6 @@ app.delete('/users/:id', function (req, res) {
 });
 
 
-//API Update PUT
-//input : nuovi parametri della scheda e id della scheda
-//output : il json della scheda
 
 app.post('/users', function (req, res) {
     try {
@@ -169,7 +172,7 @@ app.put('/users/:id', function (req, res) {
         let payload = req.body
         let utente = utentiDatabase[id];
         if (utente === undefined) {
-            res.status(404).send(notFound)
+            res.status(404).json(notFound)
         } else {
             if ((Object.keys(payload).filter(x => !["name", "surname", "username", "password", "email", "isPt"].includes(x))).length > 0) {
                 console.log("BAD 1 ")
@@ -189,7 +192,7 @@ app.put('/users/:id', function (req, res) {
                     Object.keys(payload).forEach(element => {
                         utentiDatabase[id][element] = payload[element]
                     });
-                    res.status(200).send(utentiDatabase[id])
+                    res.status(200).json(utentiDatabase[id])
                 }
 
             }

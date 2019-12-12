@@ -1,33 +1,35 @@
-const classes = require('./classes')
+/******* configs ********/
+const classes = require('./classes') //file in cui ho definito Db e Message
 const Db = classes.Db
 const Message = classes.Message
-
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
-
 const port = process.env.PORT || 3000
 
-var db = new Db()
-
-const MessageTypes = ['text', 'image', 'voicemail', 'video']
-
 app.use(bodyParser.json()) 
-
 app.listen(port, function () {
     console.log('Listening at http://localhost:' + port)
 })
 
+
+const MessageTypes = ['text', 'image', 'voicemail', 'video']
+var db = new Db()
+
+/******** MIDDLEWARES  *********/
+
 app.use('/chat/:idFrom/:idTo?/:idMessage?', function (req, res, next) {
-    
     const idFrom = Number.parseInt(req.params.idFrom)
     const idTo = Number.parseInt(req.params.idTo)
     const idMessage = Number.parseInt(req.params.idMessage)
     
-    let idCheck = Number.isInteger(idFrom) && (!idTo || Number.isInteger(idTo))
-    let messageCheck = idMessage ? Number.isInteger(idMessage) : true
+    let idFromCheck = Number.isInteger(idFrom)
+    let idToCheck = req.params.idTo == undefined ? true : Number.isInteger(idTo)
+    let idMessageCheck = req.params.idMessage == undefined ? true : Number.isInteger(idMessage)
+    let sameCheck = idFrom != idTo
+    /** inserire qui il check che gli utenti siano esistenti */
 
-    if (idCheck && messageCheck){
+    if (idFromCheck && idToCheck && idMessageCheck && sameCheck){
         res.locals.idFrom = idFrom 
         res.locals.idTo = idTo 
         res.locals.idMessage = idMessage 
@@ -37,21 +39,21 @@ app.use('/chat/:idFrom/:idTo?/:idMessage?', function (req, res, next) {
     }
 });
 
-//logger
 app.use('/chat/:idFrom/:idTo?/:idMessage?', function (req, res, next) {
     console.log(`${req.method} : ${req.originalUrl}`)
     next()
 })
 
 
-//apis
+/******** APIs  ********/
 
+/* Retrieve the whole dbchat. For testing purposes*/ 
 app.get('/chat', function (req, res) {
    res.status(200)
-   res.json(db) 
+   res.json(db.dbchat) 
 })
 
-//ottiene un messaggio
+//get a message
 app.get('/chat/:idFrom/:idTo/:idMessage', function(req, res){
     const idFrom = res.locals.idFrom
     const idTo = res.locals.idTo
@@ -65,7 +67,7 @@ app.get('/chat/:idFrom/:idTo/:idMessage', function(req, res){
     
 })
 
-//ottiene una chat
+//get a chat
 app.get('/chat/:idFrom/:idTo', function (req, res) {
     const idFrom = res.locals.idFrom
     const idTo = res.locals.idTo
@@ -78,7 +80,7 @@ app.get('/chat/:idFrom/:idTo', function (req, res) {
     
 })
 
-//send a message
+//post a message (user to user)
 app.post('/chat/:idFrom/:idTo', function (req, res) {
     const idFrom = res.locals.idFrom
     const idTo = res.locals.idTo
@@ -95,7 +97,7 @@ app.post('/chat/:idFrom/:idTo', function (req, res) {
     }
 })
 
-//send a message to All
+//post a message (user to all)
 app.post('/chat/:idFrom', function (req, res) {
     const idFrom = res.locals.idFrom
     let body = req.body

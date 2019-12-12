@@ -110,7 +110,7 @@ router.get('/:id/:data_inizio/:data_fine', function(req, res){
     let data_inizio = req.params.data_inizio;
     let data_fine = req.params.data_fine;
     let storico = [];
-    if (id && data_inizio && data_fine && data_fine > data_inizio){
+    if (id && data_inizio && data_fine && data_fine >= data_inizio){
       for (let i = 0; i < storicoDB[id].length; i++){
         let time = storicoDB[id][i]["timestamp"];
         if (time >= data_inizio && time <= data_fine){

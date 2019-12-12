@@ -7,8 +7,8 @@ app.use(express.json());
 
 const infoRouter = require('./routes/APIInfo');
 app.use('/info', infoRouter);
-//const infoRouter = require('./routes/APIschede');
-//app.use('/schede', infoRouter);
+const infoRouter = require('./routes/APIschede');
+app.use('/schede', infoRouter);
 
 app.get('/', function(req, res){
   res.status(200);

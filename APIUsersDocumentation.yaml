@@ -3,6 +3,9 @@ info:
   version: '1.0'
   title: "progettois2 "
   description: Our API allow users to fetch many informations about their gym and their progresses
+  license:
+    name: MIT
+    url: https://github.com/apiaryio/polls-api/blob/master/LICENSE
 # You should put here the URL to your Heroku instance    
 host: se2-movies.herokuapp.com
 basePath: /
@@ -62,10 +65,12 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/userRequest'
+            $ref: '#/definitions/userRequestPost'
       responses:
         200:
           description: Successful Response
+          schema:
+            $ref: '#/definitions/user'
         400:
           description: The json in the request doesn't  contain all the required fields or some unrequired fields are present
           schema:
@@ -141,7 +146,7 @@ paths:
         in: body
         required: true
         schema:
-          $ref: '#/definitions/userRequest'
+          $ref: '#/definitions/userRequestPut'
            
       responses:
         200:
@@ -170,9 +175,6 @@ definitions:
       id:
         type: number
         description: The identifier.
-        
-  # This is a base Movie model that "packs" the basic properties
-  # to avoid repeating ourselves.
   user:
     title: user
     type: object
@@ -207,9 +209,16 @@ definitions:
         email: mail@example.com
         username: VonStaben
         isPt: true
-  userRequest:
+  userRequestPost:
     title: user
     type: object
+    required: 
+      - name
+      - password
+      - surname
+      - username
+      - email
+      - isPt
     properties:
       password:
         type: string
@@ -243,6 +252,46 @@ definitions:
         email: mail@example.com
         username: VonStaben
         isPt: true
+        
+  userRequestPut:
+    title: user
+    type: object
+    
+    properties:
+      password:
+        type: string
+        description: the password of the user
+        
+      name:
+        type: string
+        description: the name of the user
+        
+      surname:
+        type: string
+        description: the surname of the user
+        
+      email:
+        
+        type: string
+        description: the email of the user
+        
+      username:
+        type: string
+        description: the username of the user
+        
+      isPt:
+        type: boolean
+        description: indicates if the user is a personal trainer or not
+        
+    example:
+        password: qwerty
+        name: Bruno
+        surname: Bianchi
+        email: mail@example.com
+        username: VonStaben
+        isPt: true
+        
+  
   error500:
     title: error
     type: object
@@ -260,7 +309,7 @@ definitions:
         type: string
         description: type of error
     example: 
-      error: bad request
+      error: request bad formed
   error404:
     title: error
     type: object

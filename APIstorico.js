@@ -1,7 +1,3 @@
-/*
- * TODO:
- */
-
 var express = require('express');
 var app = express();
 
@@ -19,9 +15,9 @@ app.listen(port, function() {
 var storicoDB = {
   1: [
       {
-          timestamp: 1575849599,
-          esercizi: [ "addominali", "piegamenti", "pesi" ],
-          ripetizioni: [ 10, 20, 30 ]
+        timestamp: 1575849599,
+        esercizi: [ "addominali", "piegamenti", "pesi" ],
+        ripetizioni: [ 10, 20, 30 ]
       },
       {
         timestamp: 1575935999,
@@ -173,7 +169,6 @@ app.put('/storico', function(req, res){
     }
     if (sent.length == 0){
       res.response={
-        error : null,
         done : 'Update completed.'
       };
       code = 200;

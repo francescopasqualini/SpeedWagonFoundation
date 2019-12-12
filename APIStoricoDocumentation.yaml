@@ -22,10 +22,7 @@ paths:
       produces:
       - application/json       
       parameters:
-        - id: body
-          timestamp: body
-          esercizi: body
-          ripetizioni: body
+        - name: body
           in: body
           required: true
           schema:
@@ -34,26 +31,27 @@ paths:
         200:
           description: Successful Response
           schema:
-            $ref: '#/definition/error200'
+            $ref: '#/definitions/error200'
         400:
           description: The request has at least one invalid parameter
           schema:
-            $ref: '#/definitions/error400'
+            $ref: '#/definitions/error422'
 
     delete:
       summary: Delete history by timestamp.
       parameters:
-      - id: body
-        data_to_del: body
-        required: true
+      - name: body
         in: body
+        schema:
+          $ref: '#/definitions/data_to_del'
+            
         description: >
           You can use this method to delete an history log about a specific user.
       responses:
         200:
           description: Successful Response
           schema:
-            $ref: '#/definition/error200'
+            $ref: '#/definitions/error200'
         404:
           description: The required id was not found
           schema:
@@ -68,11 +66,8 @@ paths:
       produces:
       - application/json  
       parameters:
-      - id: body
-        timestamp: body
-        update: body
+      - name: body
         in: body
-        required: true
         schema:
           $ref: '#/definitions/postStorico'
       responses:
@@ -93,54 +88,32 @@ paths:
     get:
       summary: Returns a user history by ID.
       parameters:
-      - id: id
-        timestamp_stop: timestamp_stop
+      - name: id
         in: path
         required: true
         description: The id of the required user
-        type : integer
+        type: integer
         format: int64
         minimum: 1
-      - timestamp_start: timestamp_start
+      - name: timestamp_start
         in: path
         required: true
         description: The timestamp of the initial temporal gap
-        type : integer
+        type: integer
         format: int64
         minimum: 1
-      - timestamp_stop: timestamp_stop
+      - name: timestamp_stop
         in: path
         required: true
         description: The timestamp of the final temporal gap
-        type : integer
+        type: integer
         format: int64
         minimum: 1
       responses: 
         200:
           description: Successful Response
           schema:
-            title: storico
-            type: object
-            properties:
-              storico: '#/definitions/storico'
-            example:
-              storico:
-              - timestamp: 1575849599
-                esercizi:
-                - addominali
-                - piegamenti
-                - pesi
-                ripetizioni:
-                - 10
-                - 20
-                - 30
-              - timestamp: 1575935999
-                esercizi:
-                - piegamenti
-                - pesi
-                ripetizioni:
-                - 30
-                - 10
+            $ref: '#/definitions/storico'
         404:
           description: Not Found
           schema:
@@ -156,7 +129,8 @@ definitions:
     items:
       type: object
       properties:
-        timestamp: integer
+        timestamp: 
+          type: integer
         esercizi:
           type: array
           items: 
@@ -179,7 +153,10 @@ definitions:
   postStorico:
     type: object
     properties:
-      timestamp: integer
+      id:
+        type: integer
+      timestamp: 
+        type: integer
       esercizi:
         type: array
         items:
@@ -199,15 +176,28 @@ definitions:
       - 20
       - 50
       - 1
+      
+  data_to_del:
+    type: object
+    properties:
+      id:
+        type: integer
+      data_to_del:
+        type: integer
+    example:
+      id: 1
+      data_to_del: 1575935999
 
   error200:
     title: success
     type: object
     properties:
-      type: string
-      description: Type of success
+      success:
+        type: string
+        description: Type of success
     example:
-      success: Added 3 exericises.
+      success: Added 3 exericises
+
   error404:
     title: error
     type: object

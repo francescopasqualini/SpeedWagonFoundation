@@ -1,6 +1,5 @@
 /******* configs ********/
 var express = require('express');
-const bodyParser = require('body-parser');
 const classes = require('./classes');
 const router = express.Router(); 
 

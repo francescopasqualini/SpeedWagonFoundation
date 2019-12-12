@@ -13,10 +13,6 @@ var badFormed = { error: "request bad formed" }
 var notFound = { error: "id not found" }
 var serverError = { error: "server error" }
 
-
-
-
-
 var utentiDatabase = {
     1: {
         id: 1,
@@ -41,7 +37,7 @@ var dim = 2;
 
 
 app.get('/users', function (req, res) {
-    console.log('API_1');
+    //console.log('API_1');
     try {
         let utentiDatabaseArray = []
         Object.keys(utentiDatabase).forEach(element => {
@@ -50,28 +46,30 @@ app.get('/users', function (req, res) {
 
         var limit = req.query.limit
         var offset = req.query.offset
-        console.log(limit)
-        console.log(offset)
-        if (limit == undefined || offset == undefined) {
-            res.status(200)
-            res.json(utentiDatabaseArray);
-        } else {
-            let tmpArray = []
-            for (let index = offset; index < utentiDatabaseArray.length && index < (offset + limit); index++) {
-                console.log(index)
-                console.log(utentiDatabaseArray[index])
-                tmpArray.push(utentiDatabaseArray[index])
+        //console.log(limit)
+        //console.log(offset)
+        if (limit == undefined) {
+            limit=10
+        } 
+        if (offset == undefined) {
+            offset=0
+        }  
+        let tmpArray = []
+        for (let index = offset; index < utentiDatabaseArray.length && index < (offset + limit); index++) {
+           // console.log(index)
+            //console.log(utentiDatabaseArray[index])
+            tmpArray.push(utentiDatabaseArray[index])
 
-            }
-            let risposta = {
-                results: tmpArray,
-                metadata: {
-                    total: utentiDatabaseArray.length
-                }
-            }
-            res.status(200)
-            res.json(risposta);
         }
+        let risposta = {
+            results: tmpArray,
+            metadata: {
+                total: utentiDatabaseArray.length
+            }
+        }
+        res.status(200)
+        res.json(risposta);
+        
 
     } catch (error) {
         res.status(500)
@@ -84,18 +82,18 @@ app.get('/users', function (req, res) {
 app.get('/users/:id', function (req, res) {
     try {
 
-        console.log('API_2');
+        //console.log('API_2');
         const id = parseInt(req.params.id);
         let response = utentiDatabase[id]
         //lettura dei parametri
         if (response === undefined) {
-            console.log("404")
+            //console.log("404")
             res.status(404)
             res.json(notFound)
         }
         else {
-            console.log("200")
-            console.log(response)
+            //console.log("200")
+            //console.log(response)
             res.status(200).json(response);
         }
     } catch (error) {
@@ -110,11 +108,11 @@ app.get('/users/:id', function (req, res) {
 //cacella un utente
 app.delete('/users/:id', function (req, res) {
     try {
-        console.log('API_3');
+        //console.log('API_3');
         const id = parseInt(req.params.id);
         let response = utentiDatabase[id]
         if (response === undefined) {
-            console.log(response)
+            //console.log(response)
             res.status(404)
             res.json(notFound)
         } else {
@@ -134,7 +132,7 @@ app.delete('/users/:id', function (req, res) {
 
 app.post('/users', function (req, res) {
     try {
-        console.log('API_4');
+        //console.log('API_4');
         let payload = req.body;
         if (payload["password"] === undefined || payload["name"] === undefined ||
             payload["surname"] === undefined || payload["email"] === undefined ||
@@ -175,19 +173,19 @@ app.put('/users/:id', function (req, res) {
             res.status(404).json(notFound)
         } else {
             if ((Object.keys(payload).filter(x => !["name", "surname", "username", "password", "email", "isPt"].includes(x))).length > 0) {
-                console.log("BAD 1 ")
+                //console.log("BAD 1 ")
                 res.status(400).json(badFormed)
             } else {
                 var flag = false
                 Object.keys(payload).forEach(element => {
                     if (!["name", "surname", "username", "password", "email", "isPt"].includes(element)) {
                         flag = true
-                        console.log(payload[element])
+                        //console.log(payload[element])
                     }
                 });
                 if (flag == true) {
                     res.status(400).json(badFormed)
-                    console.log("bad 2")
+                    //console.log("bad 2")
                 } else {
                     Object.keys(payload).forEach(element => {
                         utentiDatabase[id][element] = payload[element]
@@ -203,4 +201,5 @@ app.put('/users/:id', function (req, res) {
     }
 
 });
+
 

@@ -7,7 +7,7 @@ info:
     name: MIT
     url: https://github.com/apiaryio/polls-api/blob/master/LICENSE
 # You should put here the URL to your Heroku instance    
-host: se2-movies.herokuapp.com
+host: speedwagonfoundation-app.herokuapp.com
 basePath: /
 schemes:
 - http
@@ -20,36 +20,33 @@ paths:
     # x-summary: Users collection
     get:
       summary: List all users in the database
-      consumes:
-      - application/json
       produces:
-      - application/json      
+      - application/json
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        description: the number of user that have to be displayed, if not present the default is 10  
+        type : integer
+        format: int64
+        minimum: 1
+      - name: offset
+        in: query
+        required: false
+        description: the index from which the users have to be displayed, if not present the default is 0  
+        type : integer
+        format: int64
+        minimum: 1
       responses:
         200:
           description: Successful Response
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/user'
-            example:
-              - id: 45
-                password: 12345
-                name: Mario
-                surname: Rossi
-                email: example@email.com
-                username: Alejoker
-                isPt: false
-              - id: 46
-                password: qwerty
-                name: Bruno
-                surname: Bianchi
-                email: mail@example.com
-                username: VonStaben
-                isPt: true
+            $ref: '#/definitions/userRequestGet'
         500:
           description: Server error
           schema:
             $ref: '#/definitions/error500'
+    
           
     post:
       description: >-
@@ -83,6 +80,8 @@ paths:
   /users/{userId}:
     get:
       summary: Returns a user by ID.
+      produces:
+      - application/json  
       parameters:
       - name: userId
         in: path
@@ -106,6 +105,8 @@ paths:
             $ref: '#/definitions/error500'
     delete:
       summary: Delete a user by ID.
+      produces:
+      - application/json  
       parameters:
       - name: userId
         in: path
@@ -132,6 +133,7 @@ paths:
       description: >-
         You may modify a user using this action. It takes a JSON
         object containing the properties of a user that have to be modified.
+        Only provided properties will be changed, non provided properties will be left unchanged
       consumes:
       - application/json
       produces:
@@ -211,6 +213,38 @@ definitions:
         email: mail@example.com
         username: VonStaben
         isPt: true
+  userRequestGet:
+    title: user
+    type: object
+    properties:
+      results:
+         type: array
+         items:
+          $ref: '#/definitions/user'
+      metadata:
+        type: object
+        properties:
+         total:
+          type: integer
+          description: the numbers of users collected in the database
+    example:
+      results:
+      - id: 46
+        password: qwerty
+        name: Bruno
+        surname: Bianchi
+        email: mail@example.com
+        username: VonStaben
+        isPt: true
+      - id: 47
+        password: calTech
+        name: Roberto
+        surname: Battiti
+        email: es@example.com
+        username: LionDeveloper
+        isPt: true
+      metadata:
+        total: 2
   userRequestPost:
     title: user
     type: object
@@ -258,7 +292,6 @@ definitions:
   userRequestPut:
     title: user
     type: object
-    
     properties:
       password:
         type: string

@@ -112,9 +112,10 @@ app.delete('/users/:id', function (req, res) {
             res.status(404)
             res.send(notFound)
         } else {
+            let tmp = utentiDatabase[id]
             delete utentiDatabase[id]
             res.status(200);
-            res.send()
+            res.json(tmp)
         }
     } catch (error) {
         res.status(500)
@@ -152,7 +153,7 @@ app.post('/users', function (req, res) {
             Object.keys(payload).forEach(element => {
                 utentiDatabase[key][element] = payload[element]
             });
-            res.status(200).send()
+            res.status(200).json(utentiDatabase[key])
         }
     } catch (error) {
         res.status(500)

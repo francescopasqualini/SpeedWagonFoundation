@@ -1,20 +1,21 @@
 /******* configs ********/
-const classes = require('./classes') //file in cui ho definito Db e Message
-const Db = classes.Db
+const classes = require('./classes') //file in cui ho definito db e Message
 const Message = classes.Message
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 3001
+var db = classes.db
 
 app.use(bodyParser.json()) 
 app.listen(port, function () {
     console.log('Listening at http://localhost:' + port)
 })
 
-
 const MessageTypes = ['text', 'image', 'voicemail', 'video']
-var db = new Db()
+var badFormed = { error: "request bad formed" }
+var notFound = { error: "id not found" }
+var serverError = { error: "server error" }
 
 /******** MIDDLEWARES  *********/
 
@@ -24,18 +25,27 @@ app.use('/chat/:idFrom/:idTo?/:idMessage?', function (req, res, next) {
     const idMessage = Number.parseInt(req.params.idMessage)
     
     let idFromCheck = Number.isInteger(idFrom)
-    let idToCheck = req.params.idTo == undefined ? true : Number.isInteger(idTo)
-    let idMessageCheck = req.params.idMessage == undefined ? true : Number.isInteger(idMessage)
+    let idToCheck = (req.params.idTo == undefined) || (Number.isInteger(idTo))
+    let idMessageCheck = (req.params.idMessage == undefined) || (Number.isInteger(idMessage))
     let sameCheck = idFrom != idTo
-    /** inserire qui il check che gli utenti siano esistenti */
+    let consistencyCheck = idFromCheck && idToCheck && idMessageCheck && sameCheck
+    
+    let isIdFromInDb = idFrom in utentiDatabase 
+    let isIdToInDb = (req.params.idTo == undefined) || (idTo in utentiDatabase)
+    let isInDbCheck = isIdFromInDb && isIdToInDb
+    
+    console.log("utentidb: " + Object.keys(utentiDatabase))
 
-    if (idFromCheck && idToCheck && idMessageCheck && sameCheck){
+    if (consistencyCheck && isInDbCheck){
         res.locals.idFrom = idFrom 
         res.locals.idTo = idTo 
         res.locals.idMessage = idMessage 
         next()
+    }else if(!consistencyCheck){
+        res.status(400).json(badFormed)
     }else{
-        res.status(400).send()
+        console.log(isIdFromInDb + "  " + isIdToInDb)
+        res.status(404).json(notFound)
     }
 });
 
@@ -62,7 +72,7 @@ app.get('/chat/:idFrom/:idTo/:idMessage', function(req, res){
     if (message){
         res.status(200).json(message)
     }else{
-        res.status(404).send()
+        res.status(404).json(notFound)
     }
     
 })
@@ -75,7 +85,7 @@ app.get('/chat/:idFrom/:idTo', function (req, res) {
     if (chat){
         res.status(200).json(chat)
     }else{
-        res.status(404).send()
+        res.status(404).json(notFound)
     }
     
 })
@@ -90,10 +100,10 @@ app.post('/chat/:idFrom/:idTo', function (req, res) {
         if (db.sendMessage(idFrom, idTo, message)){
             res.status(201).send()
         }else {
-            res.status(500).send()
+            res.status(500).json(serverError)
         }
     }else{
-        res.status(400).send()
+        res.status(400).json(badFormed)
     }
 })
 
@@ -103,7 +113,7 @@ app.post('/chat/:idFrom', function (req, res) {
     let body = req.body
     if (body && body.content && MessageTypes.includes(body.type)){
         let success = true
-        db.dbchat.users.forEach(function (user) {
+        Object.keys(utentiDatabase).forEach(function (user) {
             if (user != idFrom) {
                 let message = new Message(body.type, idFrom, user, body.content)
                 success = db.sendMessage(idFrom, user, message) && success
@@ -112,10 +122,10 @@ app.post('/chat/:idFrom', function (req, res) {
         if (success){
             res.status(201).send()
         }else {
-            res.status(500).send()
+            res.status(500).json(serverError)
         }
     }else {
-        res.status(400).send()
+        res.status(400).json(badFormed)
     }
 })
 
@@ -127,7 +137,7 @@ app.delete('/chat/:idFrom/:idTo/:idMessage', function (req, res) {
     if (db.deleteMessage(idFrom, idTo, idMessage)) {
         res.status(204).send()
     }else{
-        res.status(404).send()
+        res.status(404).json(notFound)
     }
 })
 
@@ -142,10 +152,10 @@ app.put('/chat/:idFrom/:idTo/:idMessage', function (req, res) {
         if (db.editMessage(idFrom, idTo, body)){
             res.status(204).send()
         }else{
-            res.status(404).send()
+            res.status(404).json(notFound)
         }
     } else {
-        res.status(400).send()
+        res.status(400).json(badFormed)
     }
 })
 

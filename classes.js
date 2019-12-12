@@ -3,13 +3,10 @@ class Db {
     constructor() {
         this.dbchat = {}
         this.dbchat.nextId = 1
-        this.dbchat.users = new Set()
     }
 
     sendMessage(idUser1, idUser2, message) {
         let res = true
-        this.dbchat.users.add(idUser1)
-        this.dbchat.users.add(idUser2)
         let idchat = getIdChat(idUser1, idUser2)
         message.id = this.dbchat.nextId ++
         message.sent_at = getTimestamp()
@@ -103,4 +100,6 @@ function getIdChat(id1, id2){
     return Math.min(id1, id2).toString() + ":" + Math.max(id1, id2).toString()
 }
 
-module.exports = {Db, Message}
+var db = new Db()
+
+module.exports = {db, Message}

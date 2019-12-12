@@ -164,7 +164,7 @@ paths:
         404:
           description: Message not found
     post:
-      summary: send a message to a user
+      summary: send a message to an existent user
       consumes:
         - application/json
       parameters:
@@ -196,7 +196,7 @@ paths:
           description: a server error occurred
   /chat/{idFrom}:
     post:
-      summary: send a message to all users
+      summary: send a message to all existent users
       consumes:
         - application/json
       parameters:

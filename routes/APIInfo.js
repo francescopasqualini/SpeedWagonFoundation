@@ -3,14 +3,14 @@ const router = express.Router();
 
 var infoDb = [
   {
-    type: "orario",
+    id: "orario",
     apertura_feriale: "7.00",
     chiusura_feriale: "22.30",
     apertura_festiva: "10.00",
     chiusura_festiva: "20.00"
   },
   {
-    type: "corsi",
+    id: "corsi",
     difesa_personale: "lun, mer, ven dalle 16.30 alle 18.00",
     cardio_fitness: "mar, gio dalle 16.30 alle 17.30",
     box: "lun, mer, ven dalle 18.30 alle 20.30",
@@ -18,7 +18,7 @@ var infoDb = [
     yoga: "tutti i giorni dalle 21 alle 22"
   },
   {
-    type: "istruttori",
+    id: "istruttori",
     difesa_personale: "Paolo Miglio",
     cardio_fitness: "Ilaria Zanobini",
     box: "Silvester Stallone",
@@ -26,7 +26,7 @@ var infoDb = [
     yoga: "Maria Juana"
   },
   {
-    type: "sale",
+    id: "sale",
     descrizione: "2 sale corsi e yoga, 2 sala pesi e attrezzi, 1 sala per la box"
   }
 ];
@@ -37,34 +37,34 @@ router.get('/', function (req, res){
   res.json(infoDb);
 });
 
-//search by type GET
-router.get('/:type', function (req, res){
-  const typeToRetrive = req.params.type;
+//search by id GET
+router.get('/:id', function (req, res){
+  const idToRetrive = req.params.id;
   var found = false;
   var response = [];
   for (var i=0; i < infoDb.length; i++){
-    if(infoDb[i].type == typeToRetrive){
+    if(infoDb[i][id] == idToRetrive){
       found = true;
       response.push(infoDb[i]);
     }
   }
   if (!found){
     res.status(404);
-    res.json({ERRORE: "Type non esistente!"});
+    res.json({ERRORE:  "Id non esistente!"});
   } else {
     res.status(200);
     res.json(response);
   }
 });
 
-//search a specific field of a type GET
-router.get('/:type/:key', function (req, res){
-  const typeToRetrive = req.params.type;
+//search a specific field of a id GET
+router.get('/:id/:key', function (req, res){
+  const idToRetrive = req.params.id;
   const keyToRetrive = req.params.key;
   var found = false;
   var response = [];
   for (var i=0; i < infoDb.length; i++){
-    if(infoDb[i].type == typeToRetrive){
+    if(infoDb[i][id] == idToRetrive){
       for (var key in infoDb[i]){
         if(key == keyToRetrive){
           response.push({[key]: infoDb[i][key]});
@@ -75,7 +75,7 @@ router.get('/:type/:key', function (req, res){
   }
   if (!found){
     res.status(404);
-    res.json({ERRORE: "Type non esistente!"});
+    res.json({ERRORE:  "Id non esistente!"});
   } else {
     res.status(200);
     res.json(response);
@@ -85,23 +85,23 @@ router.get('/:type/:key', function (req, res){
 //add new info POST
 router.post('/', function (req, res){
   let newInfo = req.body;
-  if (req.body["type"]==undefined){
+  if (req.body["id"]==undefined){
     res.status(400);
-    res.json({ERRORE: "Campo type non presente!"});
+    res.json({ERRORE: "Campo id non presente!"});
   } 
   else {
     var found = false;
     for( var i=0; i<infoDb.length; i++){
-      if(req.body["type"]==infoDb[i]["type"]){
+      if(req.body["id"]==infoDb[i]["id"]){
         found = true;
       }
     }
     if(found){
       res.status(400);
-      res.json({ERRORE: "Campo type già presente!"});
+      res.json({ERRORE: "Campo id già presente!"});
     } else {
       infoDb.push(newInfo);
-      res.location('/info/' + newInfo.type);
+      res.location('/info/' + newInfo.id);
       res.status(201);
       res.json({OK: "Info creata con successo!"});
     }
@@ -109,14 +109,18 @@ router.post('/', function (req, res){
 });
 
 //modify existing info PUT
-router.put('/:type', function (req, res){
-  const typeToModify = req.params.type;
+router.put('/:id', function (req, res){
+  const idToModify = req.params.id;
   var found = false;
   for (var i=0; i < infoDb.length; i++){
-    if(infoDb[i].type == typeToModify){
+    if(infoDb[i][id] == idToModify){
       found = true;
       for (var key1 in infoDb[i]){
         for (var key2 in req.body){
+          if (key2 == "id"){
+            res.status(500);
+            res.json({ERRORE: "Impossibile eliminare il campo id!"});
+          }
           if (key1 == key2){
             infoDb[i][key1] = req.body[key2];
           } else {
@@ -129,7 +133,7 @@ router.put('/:type', function (req, res){
   }
   if (!found){
     res.status(404);
-    res.json({ERRORE: "Type già esistente!"});
+    res.json({ERRORE: "Id non esistente!"});
   } else {
     res.status(200);
     res.json({OK: "Info modificata con successo!"});
@@ -137,18 +141,18 @@ router.put('/:type', function (req, res){
 });
 
 //delete completely existing info DELETE
-router.delete('/:type', function(req,res){
-  const typeToDelete = req.params.type;
+router.delete('/:id', function(req,res){
+  const idToDelete = req.params.id;
   var found = false;
   for (var i=0; i < infoDb.length; i++){
-    if(infoDb[i].type == typeToDelete){
+    if(infoDb[i][id] == idToDelete){
       found = true;
       infoDb.splice(i,1);
     }
   }
   if (!found){
     res.status(404);
-    res.json({ERRORE: "Type non esistente!"});
+    res.json({ERRORE: "Id non esistente!"});
   } else {
     res.status(200);
     res.json({OK: "Info eliminata con successo!"});
@@ -156,23 +160,23 @@ router.delete('/:type', function(req,res){
 });
 
 //delete partially an existing info DELETE
-router.delete('/:type/:key', function(req,res){
-  const typeToModify = req.params.type;
+router.delete('/:id/:key', function(req,res){
+  const idToModify = req.params.id;
   const keyToDelete = req.params.key;
   var found = false;
   for (var i=0; i < infoDb.length; i++){
-    if(infoDb[i].type == typeToModify){
+    if(infoDb[i][id] == idToModify){
       found = true;
       var deleted = false;
       for (var key1 in infoDb[i]){
-        if(key1 == keyToDelete && keyToDelete != "type"){
+        if(key1 == keyToDelete && keyToDelete != "id"){
           delete infoDb[i][keyToDelete];
           deleted = true;
         }
       }
-      if (keyToDelete == "type"){
+      if (keyToDelete == "id"){
         res.status(500);
-        res.json({ERRORE: "Impossibile eliminare il campo type!"});
+        res.json({ERRORE: "Impossibile eliminare il campo id!"});
       } else if (!deleted){
         res.status(404);
         res.json({ERRORE: "Campo non esistente!"});
@@ -181,7 +185,7 @@ router.delete('/:type/:key', function(req,res){
   }
   if (!found){
     res.status(404);
-    res.json({ERRORE: "Type non esistente!"});
+    res.json({ERRORE: "Id non esistente!"});
   } else {
     res.status(200);
     res.json({OK: "Info eliminata con successo!"});

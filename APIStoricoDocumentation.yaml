@@ -2,8 +2,7 @@ swagger: '2.0'
 info:
   version: '1.0'
   title: "progettois2 "
-  description: Our API allow users to fetch many informations about their gym and their progresses
-# You should put here the URL to your Heroku instance    
+  description: Our API allow users to fetch many informations about their gym and their progresses 
 host: se2-movies.herokuapp.com
 basePath: /
 schemes:
@@ -14,7 +13,6 @@ produces:
 - application/json
 paths:
   /sotrico:
-    # x-summary: Users collection
     post:
       description: >-
         You can add a user log using this method
@@ -151,24 +149,8 @@ paths:
           description: Malformed Input
           schema:
             $ref: '#/definitions/error422'
-            
-    
-    
-tags:
-  - name: user
-    description: Everything about your Pets
+
 definitions:
-  # This is just a simple model for that defines the Primary Key
-  # We could reuse this on the rest of our models.
-  PK:
-    type: object
-    properties:
-      id:
-        type: number
-        description: The identifier.
-        
-  # This is a base Movie model that "packs" the basic properties
-  # to avoid repeating ourselves.
   storico:
     type: array
     items:

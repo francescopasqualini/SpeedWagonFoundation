@@ -62,7 +62,7 @@ function get_index_storico_data(db, timestamp){
 
 //-----------------------------------------------------------------------//
 // add POST
-router.post('/storico', function(req, res){
+router.post('/', function(req, res){
   console.log('POST storico');
   let code = 503;
   let json = req.body;
@@ -104,7 +104,7 @@ router.post('/storico', function(req, res){
 });
 
 // get storico GET
-router.get('/storico/:id/:data_inizio/:data_fine', function(req, res){
+router.get('/:id/:data_inizio/:data_fine', function(req, res){
     console.log('GET storico');
     let id = req.params.id;
     let data_inizio = req.params.data_inizio;
@@ -136,7 +136,7 @@ router.get('/storico/:id/:data_inizio/:data_fine', function(req, res){
 });
 
 // update data PUT
-router.put('/storico', function(req, res){
+router.put('/', function(req, res){
   console.log('PUT storico');
   let code = 503;
   let sent = [];
@@ -181,7 +181,7 @@ router.put('/storico', function(req, res){
 });
 
 // delete data DELETE
-router.delete('/storico', function(req, res){
+router.delete('/', function(req, res){
   console.log('DELETE storico');
   let code = 503;
   let json = req.body;

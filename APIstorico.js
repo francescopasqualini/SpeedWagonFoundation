@@ -17,31 +17,32 @@ app.listen(port, function() {
 //-----------------------------------------------------------------------//
 // Database
 var storicoDB = {
-  1: {
-      "1575849599": {
-          addominali: 10,
-          piegamenti: 20,
-          pesi: 30
+  1: [
+      {
+          timestamp: 1575849599,
+          esercizi: [ "addominali", "piegamenti", "pesi" ],
+          ripetizioni: [ 10, 20, 30 ]
       },
-      "1575935999": {
-        piegamenti: 30,
-        pesi: 10
+      {
+        timestamp: 1575935999,
+        esercizi: [ "piegamenti", "pesi" ],
+        ripetizioni: [ 30, 10 ]
+      }
+    ],
+  2: [
+      {
+        timestamp: 1575849599,
+        esercizi: [ "addominali", "piegamenti", "pesi" ],
+        ripetizioni: [ 10, 20, 30 ]
+      }
+    ],
+  3: [
+    {
+      timestamp: 1575849599,
+      esercizi: [ "addominali", "piegamenti", "pesi" ],
+      ripetizioni: [ 10, 20, 30 ]
     }
-  },
-  2: {
-    "1575849599": {
-        addominali: 10,
-        piegamenti: 20,
-        pesi: 30
-    }
-  },
-  3: {
-    "1575849599": {
-        addominali: 10,
-        piegamenti: 20,
-        pesi: 30
-    }
-  }
+  ]
 };
 
 // functions
@@ -53,6 +54,24 @@ function size(a){
   return count;
 }
 
+function contains_time(db, timestamp){
+  for (let i = 0; i < db.length; i++){
+    if (db[i] && db[i]["timestamp"] == timestamp){
+      return true;
+    }
+  }
+  return false;
+}
+
+function get_index_storico_data(db, timestamp){
+  for (let i = 0; i < db.length; i++){
+    if (db[i]["timestamp"] == timestamp){
+      return i;
+    }
+  }
+  return undefined;
+}
+
 
 //-----------------------------------------------------------------------//
 // add POST
@@ -61,25 +80,34 @@ app.post('/storico', function(req, res){
   let code = 503;
   let json = req.body;
   let id = json["id"];
-  let data = json["data"];
+  let timestamp = json["timestamp"];
   let esercizi = json["esercizi"];
-  if (id && data && esercizi && size(esercizi) > 0){
+  let ripetizioni = json["ripetizioni"];
+  if (id && timestamp && esercizi && ripetizioni && esercizi.length > 0 && esercizi.length == ripetizioni.length){
     if (!storicoDB[id]){
-      storicoDB[id] = {}
+      storicoDB[id] = [];
     }
-    if (!storicoDB[id][data]){
-      storicoDB[id][data] = {}
-    }
-    storicoDB[id][data] = esercizi;
+    if (!contains_time(storicoDB[id], timestamp)){
+      o = {
+        "timestamp" : timestamp,
+        "esercizi" : esercizi,
+        "ripetizioni" : ripetizioni
+      };
+      storicoDB[id].push(o);
 
-    res.response={
-      error: null,
-      done: "Added " + size(esercizi) + " exercise"
+      code = 200;
+      res.response={
+        success: "Added " + size(esercizi) + " exercises."
+      };
+    } else {
+      code = 409;
+      res.response={
+        error: "Data already exists."
+      };
     }
-    code = 200;
   } else {
     res.response={
-      error: "Error. id or data or esercizi are INVALID"
+      error: "Error. Something is wrong with data you passed."
     };
     code = 422;
   }
@@ -96,9 +124,10 @@ app.get('/storico/:id/:data_inizio/:data_fine', function(req, res){
     let data_fine = req.params.data_fine;
     let storico = [];
     if (id && data_inizio && data_fine && data_fine > data_inizio){
-      for (key in storicoDB[id]){
-        if (key >= data_inizio && key <= data_fine){
-          storico.push(storicoDB[id]);
+      for (let i = 0; i < storicoDB[id].length; i++){
+        let time = storicoDB[id][i]["timestamp"];
+        if (time >= data_inizio && time <= data_fine){
+          storico.push(storicoDB[id][i]);
         }
       }
       if (storico.length == 0){
@@ -107,7 +136,6 @@ app.get('/storico/:id/:data_inizio/:data_fine', function(req, res){
       } else {
         code = 200;
         res.response={
-          error: null,
           storico : storico
         };
       }
@@ -127,17 +155,16 @@ app.put('/storico', function(req, res){
   let sent = [];
   let json = req.body;
   let id = json["id"];
-  let data = json['data'];
+  let timestamp = json['timestamp'];
   let update = json['update'];
-  if (id && data && update){
-    if (storicoDB[id][data]){
-      for (var key in update){
-        var val = storicoDB[id][data][key];
-        if (update == 0){
-          delete update[key];
-        } else if (val || update[key] > 0) {
-          // if key exists
-          storicoDB[id][data][key] = update[key];
+  if (id && timestamp && update && update["esercizi"].length > 0 && update["esercizi"].length == update["ripetizioni"].length){
+    if (contains_time(storicoDB[id], timestamp)){
+      for (let i = 0; i < update["esercizi"].length; i++){
+        let index = get_index_storico_data(storicoDB[id], timestamp)
+        let val = storicoDB[id][index]["esercizi"];
+        if (val && update["ripetizioni"][i] >= 0){
+          let j = val.indexOf(update["esercizi"][i]);
+          storicoDB[id][index]["ripetizioni"][j] = update["ripetizioni"][i]
         } else {
           console.log('Error. Unexpected value: ' + key + ' ' + update[key]);
           sent.push(key);
@@ -175,16 +202,15 @@ app.delete('/storico', function(req, res){
   let id = json["id"];
   let data_to_del = json['data_to_del'];
   if (id && data_to_del){
-    if (storicoDB[id] && storicoDB[id][data_to_del]){
-      delete storicoDB[id][data_to_del];
+    if (storicoDB[id] && contains_time(storicoDB[id], data_to_del)){
+      let index = get_index_storico_data(storicoDB[id], data_to_del);
+      storicoDB[id].splice(index, 1);
       res.response={
-        error : null,
         delete: 'Del completed'
       };
       code = 200;
     } else {
       res.response={
-        error : null,
         delete: 'Data to del NOT FOUND'
       };
       code = 404;

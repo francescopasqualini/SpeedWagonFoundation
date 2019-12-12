@@ -3,7 +3,7 @@ info:
   version: '1.0'
   title: "progettois2 "
   description: these API allow to fetch data about training plan and create, modify, delete them
-# You should put here the URL to your Heroku instance    
+# You should put here the URL to your Heroku instance
 host: speedwagonfoundation-app.herokuapp.com
 basePath: /
 schemes:
@@ -22,7 +22,7 @@ paths:
       consumes:
       - application/json
       produces:
-      - application/json       
+      - application/json
       parameters:
         - name: body
           in: body
@@ -33,7 +33,7 @@ paths:
         200:
           description: Successful Response
 
-    
+
   /schede/{schedaId}:
     get:
       summary: Returns a training plan by ID.
@@ -45,7 +45,7 @@ paths:
         type : integer
         format: int64
         minimum: 1
-      responses: 
+      responses:
         200:
           description: Successful Response
           schema:
@@ -79,7 +79,7 @@ paths:
       consumes:
       - application/json
       produces:
-      - application/json  
+      - application/json
       parameters:
       - name: schedaId
         in: path
@@ -102,9 +102,9 @@ paths:
           description: The required id was not found
           schema:
             $ref: '#/definitions/error404'
-            
-    
-    
+
+
+
 tags:
   - name: user
     description: Everything about the Gym
@@ -115,17 +115,13 @@ definitions:
       id:
         type: number
         description: The identifier.
-        
-        
-  
+
+
+
   scheda:
     title: scheda
     type: object
     properties:
-      username:
-         type: string
-         readOnly: true
-         description: the username of the user. Read only
       N_esercizi:
         type: integer
         description: the number of excercise
@@ -133,7 +129,6 @@ definitions:
         type: object
         description: the excercises in the training plan
     example:
-        username: "bruno"
         N_esercizi: 2
         esercizi: {
           esercizio1: {
@@ -155,14 +150,14 @@ definitions:
               "descrizione": "fai le flessioni"
           }
         }
-        
+
 
   error404:
     title: error
     type: object
     properties:
-      error: 
+      error:
         type: string
         description: type of error
-    example: 
+    example:
       error: id not found

@@ -5,7 +5,6 @@ const router = express.Router();
 
 var SchedeDatabase={
     1:{
-     username: "bruno",
       N_esercizi: 2,
       esercizi:{
         esercizio1: {
@@ -29,7 +28,6 @@ var SchedeDatabase={
     }
    },
    2:{
-     username: "gino",
      N_esercizi: 2,
      esercizi:{
        esercizio1: {
@@ -53,7 +51,6 @@ var SchedeDatabase={
    }
   },
   3:{
-    username: "fausto",
     N_esercizi: 2,
     esercizi:{
       esercizio1:{
@@ -113,12 +110,12 @@ router.post('/', function(req,res){
     console.log('API_create');
     let json = req.body;
 
-    let username = json["username"];
+    //let username = json["username"];
     let N_esercizi = json["N_esercizi"];
     let esercizi = json["esercizi"];
 
     var item={
-      username : username,
+      //username : username,
       N_esercizi : N_esercizi,
       esercizi : esercizi
     }
@@ -155,12 +152,12 @@ router.put('/:id',function(req,res){
     let json = req.body;
     if(found == true){
 
-      let username = json["username"];
+      //let username = json["username"];
       let N_esercizi = json["N_esercizi"];
       let esercizi = json["esercizi"];
 
       var item = {
-        username : username,
+        //username : username,
         N_esercizi : N_esercizi,
         esercizi : esercizi
       }

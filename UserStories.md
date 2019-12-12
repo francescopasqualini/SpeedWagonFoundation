@@ -2,8 +2,17 @@
 ## APP PER LA PALESTRA PER REGISTRARE I PROGRESSI E LEGGERE LE SCHEDE
 ## UTILIZZATA DA I PERSONAL TRAINER E DAI CLIENTI DI UNA PALESTRA
 
+## User Story 1 (Jacopo Sitran) - BTFB: 4.26
+* Nome/Descrizione: Informazioni sui Clienti - l'amministratore del sito può creare, modificare, cancellare e leggere gli utenti del proprio sito
+* Value Points: 98
+* Story Points: 23
+* Come dimostrare: 
+  * Test creazione utente
+  * Test cancellazione utente
+  * Test modifica utente
+  * Test lettura utente
 
-## User story 1 (luca Staboli) - BFTB: 2.62
+## User story 2 (luca Staboli) - BFTB: 2.62
 * Nome/Descrizione: Sezione schede per l'allenamento - l'atleta visiona la scheda fornitagli dal personal trainer, mentre il PT crea la scheda
 * Value Points: 89
 * Story Points: 34
@@ -14,7 +23,7 @@
   * Test di cancellazione da parte del persona trainer 
 
 
-## User story 2 (Alessio Valenza) - BFTB: 2.61
+## User story 3 (Alessio Valenza) - BFTB: 2.61
 * Nome/Descrizione: Consigli del Personal Trainer tramite Chat -  l'atleta visiona i consigli alimentari e sullo stile di vita fornitogli dal personal trainer e li legge dalla chat con il PT, mentre il PT li crea
 * Value Points: 34
 * Story Points: 13
@@ -33,17 +42,9 @@
   * Test 3
 
 
-## User Story 5 (Jacopo Sitran) - BTFB: 1.43
-* Nome/Descrizione: Informazioni sui Clienti - Nome, Username, password e altre generalità dei Clienti della Palesta
-* Value Points: 33
-* Story Points: 23
-* Come dimostrare: 
-  * Test 1
-  * Test 2
-  * Test 3
 
 
-## User story 3 (Francesco Pasqualini) - BFTB: 1.00
+## User story 5 (Francesco Pasqualini) - BFTB: 1.00
 * Nome/Descrizione: Registrazione dei miglioramenti e Storico dei Miglioramenti - l'atleta inserisce i propri migloramenti prestazionali e ne viene visualizzato il progresso
 * Value Points: 55
 * Story Points: 55
@@ -57,7 +58,7 @@
 
 
 ## SPRINT:
-il primo backlog sprint prevede di fare le user stories N.1/N.4
+il primo backlog sprint prevede di fare le user stories N.1/N.5
 
 
 

@@ -2,9 +2,9 @@ swagger: '2.0'
 info:
   version: '1.0'
   title: "progettois2 "
-  description: Our API allow users to fetch many informations about their gym and their progresses
+  description: these API allow to fetch data about training plan and create, modify, delete them
 # You should put here the URL to your Heroku instance    
-host: se2-movies.herokuapp.com
+host: speedwagonfoundation-app.herokuapp.com
 basePath: /
 schemes:
 - http
@@ -14,7 +14,6 @@ produces:
 - application/json
 paths:
   /schede:
-    # x-summary: Users collection
     post:
       description: >-
         You may create a training plan using this action. It takes a JSON
@@ -108,10 +107,8 @@ paths:
     
 tags:
   - name: user
-    description: Everything about your Pets
+    description: Everything about the Gym
 definitions:
-  # This is just a simple model for that defines the Primary Key
-  # We could reuse this on the rest of our models.
   PK:
     type: object
     properties:
@@ -120,8 +117,6 @@ definitions:
         description: The identifier.
         
         
-  # This is a base Movie model that "packs" the basic properties
-  # to avoid repeating ourselves.
   
   scheda:
     title: scheda
@@ -136,7 +131,7 @@ definitions:
         description: the number of excercise
       esercizi:
         type: object
-        description: the name of the user
+        description: the excercises in the training plan
     example:
         username: "bruno"
         N_esercizi: 2

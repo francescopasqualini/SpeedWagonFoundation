@@ -1,0 +1,9 @@
+{
+    "username" : "username",
+    "data" : "DD/MM/YYYY",
+    "esercizi" :{
+        "addominali" : 20,
+        "piegamenti" : 30,
+        "pesi" : 50
+    }
+}

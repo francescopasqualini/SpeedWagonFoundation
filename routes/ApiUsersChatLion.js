@@ -16,7 +16,7 @@ var utentiDatabase = {
         id: 1,
         password: "password",
         name: "bruno",
-        surname: "crispo",
+        surname: "emilio",
         email: "example@mail.com",
         username: "processo",
         isPt: true,
@@ -24,8 +24,8 @@ var utentiDatabase = {
     2: {
         id: 2,
         password: "12345",
-        name: "gino",
-        surname: "perna",
+        name: "fioramante",
+        surname: "fortini",
         email: "example@mail.com",
         username: "mongodb",
         isPt: false

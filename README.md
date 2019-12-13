@@ -1,7 +1,7 @@
 # SpeedWagonFoundation
 
-*il file di documentazione è swagger.yaml
-*il codice delle API è nella cartella "routes"
+* il file di documentazione è swagger.yaml
+* il codice delle API è nella cartella "routes"
 
 * Luca Staboli      @JamboAmigo  MAT.195122
 * Jacopo Sitran    @JacopoSitran MAT.193585

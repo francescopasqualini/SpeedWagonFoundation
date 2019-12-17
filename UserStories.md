@@ -2,7 +2,7 @@
 ## APP PER LA PALESTRA PER REGISTRARE I PROGRESSI E LEGGERE LE SCHEDE
 ## UTILIZZATA DA I PERSONAL TRAINER E DAI CLIENTI DI UNA PALESTRA
 
-## User Story 1 (Jacopo Sitran) - BTFB: 4.26
+## User Story 1 (Jacopo Sitran) - BTFB: 4.66
 * Nome/Descrizione: Informazioni sui Clienti - l'amministratore del sito può creare, modificare, cancellare e leggere gli utenti del proprio sito
 * Value Points: 98
 * Story Points: 21

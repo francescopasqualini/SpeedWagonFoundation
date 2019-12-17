@@ -5,7 +5,7 @@
 ## User Story 1 (Jacopo Sitran) - BTFB: 4.26
 * Nome/Descrizione: Informazioni sui Clienti - l'amministratore del sito può creare, modificare, cancellare e leggere gli utenti del proprio sito
 * Value Points: 98
-* Story Points: 23
+* Story Points: 21
 * Come dimostrare: 
   * Test creazione utente
   * Test cancellazione utente

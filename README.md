@@ -1,8 +1,6 @@
 # SpeedWagonFoundation
 
-* il file di documentazione è swagger.yaml
-* il codice delle API è nella cartella "routes"
-* https://speedwagonfoundationapp.docs.apiary.io/
+* the wiki can be found at this link https://github.com/francescopasqualini/SpeedWagonFoundation/wiki
 
 * Luca Staboli      @JamboAmigo  MAT.195122
 * Jacopo Sitran    @JacopoSitran MAT.193585

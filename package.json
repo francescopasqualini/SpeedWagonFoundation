@@ -1,0 +1,24 @@
+{
+  "name": "speedwagonfoundation",
+  "version": "1.0.0",
+  "description": "API per accedere alle info della palestra",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/francescopasqualini/SpeedWagonFoundation.git"
+  },
+  "author": "Francesco Pavanello",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "body-parser": "^1.19.0",
+    "node-fetch": "^2.2.1"
+  },
+  "bugs": {
+    "url": "https://github.com/francescopasqualini/SpeedWagonFoundation/issues"
+  },
+  "homepage": "https://github.com/francescopasqualini/SpeedWagonFoundation#readme"
+}

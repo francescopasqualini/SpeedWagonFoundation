@@ -1,52 +1,51 @@
 # Backlog
 ## APP PER LA PALESTRA PER REGISTRARE I PROGRESSI E LEGGERE LE SCHEDE
+## UTILIZZATA DA I PERSONAL TRAINER E DAI CLIENTI DI UNA PALESTRA
 
-## User story 1 - BFTB: 3.00
-* Nome/Descrizione: Login - l'utente effettua il login 
-* Value Points: 6
-* Story Points: 2
+## User Story 1 (Jacopo Sitran) - BTFB: 4.26
+* Nome/Descrizione: Informazioni sui Clienti - l'amministratore del sito può creare, modificare, cancellare e leggere gli utenti del proprio sito
+* Value Points: 98
+* Story Points: 23
 * Come dimostrare: 
-  * Test con utente e password validi.
-  * Test con utente valido e password errata.
-  * Test con nome utente e password sbagliati.
-  * test recupero credenziali.
+  * Test creazione utente
+  * Test cancellazione utente
+  * Test modifica utente
+  * Test lettura utente
 
-## User story 4 - BFTB: 2.62
+## User story 2 (luca Staboli) - BFTB: 2.62
 * Nome/Descrizione: Sezione schede per l'allenamento - l'atleta visiona la scheda fornitagli dal personal trainer, mentre il PT crea la scheda
 * Value Points: 89
 * Story Points: 34
 * Come dimostrare: 
   * Test di creazione e inserimento esercizi da parte del personal trainer
   * Test modifica esercizi da parte del personal trainer
-  * Test di visualizzazione da parte dell'atleta. 
+  * Test di visualizzazione da parte dell'atleta
+  * Test di cancellazione da parte del persona trainer 
 
-## User story 6 - BFTB: 2.61
-* Nome/Descrizione: Consigli del Personal Trainer -  l'atleta visiona i cosigli alimentari e sullo stile di vita fornitogli dal personal trainer, mentre il PT li crea
+
+## User story 3 (Alessio Valenza) - BFTB: 2.61
+* Nome/Descrizione: Consigli del Personal Trainer tramite Chat -  l'atleta visiona i consigli alimentari e sullo stile di vita fornitogli dal personal trainer e li legge dalla chat con il PT, mentre il PT li crea
 * Value Points: 34
 * Story Points: 13
 * Come dimostrare: 
   * Test creazione e modifica consiglio
   * Test visualizzazione consiglio
 
-## User story 5 - BFTB: 2.61
-* Nome/Descrizione: Tutorial esercizi - l'atleta visualizza un breve video tutorial su come fare gli esercizi, il pt può crearli e modificarli
-* Value Points: 34
-* Story Points: 13
-* Come dimostrare: 
-  * Test visualizzazione del tutorial da scheda e da sezione apposita
-  * Test modifica tutorial da parte del Personal Trainer
 
-## User story 2 - BFTB: 2.00
-* Nome/Descrizione: Registrazione - l'utente si registra
-* Value Points: 6
-* Story Points: 3
+## User Story 4 (Francesco Pavanello) - BTFB: 2.20
+* Nome/Descrizione: Informazioni di tutta la Palestra - poter ottenere Info circa a Orari, tipi di Corsi, Nomi degli Istruttori, e Sale disponibili per l'allenamento
+* Value Points: 33
+* Story Points: 15
 * Come dimostrare: 
-  * Test con username già esistente
-  * Test con password non valida per la sicurezza
-  * Test ricezione email di conferma per registrazione effettuata
+  * Test 1
+  * Test 2
+  * Test 3
 
-## User story 7 - BFTB: 1.00
-* Nome/Descrizione: Registrazione dei miglioramenti - l'atleta inserisce i propri migloramenti prestazionali e ne viene visualizzato il progresso
+
+
+
+## User story 5 (Francesco Pasqualini) - BFTB: 1.00
+* Nome/Descrizione: Registrazione dei miglioramenti e Storico dei Miglioramenti - l'atleta inserisce i propri migloramenti prestazionali e ne viene visualizzato il progresso
 * Value Points: 55
 * Story Points: 55
 * Come dimostrare: 
@@ -54,16 +53,9 @@
   * Test inserimento miglioramenti
   * Test visualizzazione grafico dei miglioramenti
 
-## User story 3 - BFTB: 0.6
-* Nome/Descrizione: Home page e icona - come il sito si presenta all'utente
-* Value Points: 13
-* Story Points: 21
-* Come dimostrare: 
-  * Test per valutare user experience
+
 
 
 
 ## SPRINT:
-il primo backlog sprint prevede di fare le user stories N.1/N.4
-
-
+il primo backlog sprint prevede di fare le user stories dalla N1 alla N5
